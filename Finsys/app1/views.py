@@ -1077,7 +1077,6 @@ def customers(request):
     return render(request, 'app1/customers.html', context)
 
 
-
 @login_required(login_url='regcomp')
 def viewcust(request, id):
     try:
@@ -1127,6 +1126,7 @@ def updatecustomer(request, id):
         custom.shippincode = request.POST['shippincode']
         custom.shipcountry = request.POST['shipcountry']
         custom.opening_balance = request.POST['openbalance']
+        custom.credit_limit = request.POST['crd_lmt']
 
         custom.save()
         return redirect('gocustomers')
@@ -1387,12 +1387,8 @@ def goaddcust(request):
     
 @login_required(login_url='regcomp')
 def goaddcust1(request):
-    try:
-        cmp1 = company.objects.get(id=request.session["uid"])
-        context = {'cmp1': cmp1}
-        return render(request, 'app1/addcust1.html', context)
-    except:
-        return redirect('godash')
+    return render(request, 'app1/addcust1.html')
+
 
 
 @login_required(login_url='regcomp')
@@ -26621,7 +26617,6 @@ def customer_profile(request,id):
     
 
     prebalance = preamount-prepayment
-    print(prebalance)
 
 
     statment = cust_statment.objects.filter(customer=su,Date=tod)
@@ -26703,17 +26698,16 @@ def customer_profile(request,id):
     return render(request, 'app1/customer_view.html', context)
 
 def active_cust(request,pk):
-    
     cmp1 = company.objects.get(id=request.session["uid"])
     custo = customer.objects.get(customerid=pk, cid=cmp1)
-    custo.status="Inactive"
+    custo.status="Active"
     custo.save()
     return redirect('customer_profile',pk)
 
 def inactive_cust(request,pk):
     cmp1 = company.objects.get(id=request.session["uid"])
     custo = customer.objects.get(customerid=pk, cid=cmp1)
-    custo.status="Active"
+    custo.status="Inactive"
     custo.save()
     return redirect('customer_profile',pk)
 
@@ -27641,9 +27635,6 @@ def estmate_filter3(request):
 def gosalesorder(request):
     cmp1 = company.objects.get(id=request.session["uid"])
     sel1 = salesorder.objects.filter(cid=cmp1).values()
-    for s in sel1:
-        cust = " " . join(s['salename'].split(" ")[1:])
-        s['cust'] = cust
     context = {
         'sel1' :sel1,
         'cmp1': cmp1

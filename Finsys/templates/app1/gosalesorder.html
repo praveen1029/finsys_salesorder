@@ -69,7 +69,7 @@
                         <center><h2 class="mb-0">SALES ORDER</h2></center>
                         <hr>
                         <div class="btn-group col-md-2" style="float: right;">
-                            <a class="btn btn-outline-info text-grey" onclick="ExportToExcel('xlsx')">Export To Excel</a>
+                            <a class="btn btn-outline-info text-grey" onclick="ExportToExcel()">Export To Excel</a>
                         </div>
                     </div>
                 </div>
@@ -158,7 +158,7 @@
 
                                             <td style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'sales_order_view' sale.id %}"> {{ sale.saleno }}</a></td>
                                             <td style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'sales_order_view' sale.id %} ">  {{ sale.reference_number }}</a></td>
-                                            <td style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'sales_order_view' sale.id %}"> {{ sale.cust }}</a></td>
+                                            <td style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'sales_order_view' sale.id %}"> {{ sale.salename }}</a></td>
                                             <td style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'sales_order_view' sale.id %} "> {{ sale.status }}</a></td>
                                             <td style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'sales_order_view' sale.id %}"> {{ sale.salestotal }}</a></td>
                                             
@@ -189,13 +189,13 @@
                 });
             });
     
-            function ExportToExcel(type, fn, dl) {
-                var elt = document.getElementById('table');
-                var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
-                return dl ?
-                    XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
-                    XLSX.writeFile(wb, fn || ('Sales Order_' + (type || 'xlsx')));
-            }
+            function ExportToExcel() {
+                const table = document.querySelector('#table');
+                const ws = XLSX.utils.table_to_sheet(table);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+                XLSX.writeFile(wb, 'SalesOrder.xlsx');
+                    }
         </script>
     {% endif %}
 {% endblock %}

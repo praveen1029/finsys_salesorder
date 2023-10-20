@@ -227,7 +227,6 @@
                                         <div class="form-row">
                                             <label for="street">Street</label>
                                             <textarea class="form-control street" id="street" name="street"
-                                                      
                                                       style="background-color: #2f516f;color: white;"></textarea>
                                             <div class="invalid-feedback">Please provide a valid Street</div>
                                         </div>
@@ -249,9 +248,8 @@
                                             <label for="state">State</label>
                                             <select type="text" class="form-control" id="state"     name="state" required
                                                     style="background-color: #2f516f; color: white;">
-                                                <option value="" disabled selected>Choose</option>
-                                                <option value="Andaman and Nicobar Islads">Andaman and Nicobar Islads
-                                                </option>
+                                                <option value="" selected hidden>Choose</option>
+                                                <option value="Andaman and Nicobar Islads">Andaman and Nicobar Islands</option>
                                                 <option value="Andhra Predhesh">Andhra Predhesh</option>
                                                 <option value="Arunachal Predesh">Arunachal Predesh</option>
                                                 <option value="Assam">Assam</option>
@@ -321,7 +319,7 @@
                                 <div class="row">
                                     <div class="col-md-12 d-flex">
                                         <h5>Shipping Address</h5>
-                                        <input class="ml-4 mt-2 ml-2" type="checkbox" onclick="poppins()" id="okay"
+                                        <input class="ml-4 ml-5" type="checkbox" onclick="poppins()" id="okay"
                                                name="okay">
                                         <label class="ml-2 mt-1 ml-2" for="okay">Same As Billing Address</label>
                                     </div>
@@ -354,9 +352,8 @@
                                             <label for="shipstate">State</label>
                                             <select type="text" class="form-control" id="plosu" name="shipstate" required
                                                     style="background-color: #2f516f; color: white;">
-                                                <option id="shipst" selected>Choose</option>
-                                                <option value="Andaman and Nicobar Islads">Andaman and Nicobar Islads
-                                                </option>
+                                                <option id="shipst" selected hidden>Choose</option>
+                                                <option value="Andaman and Nicobar Islads">Andaman and Nicobar Islands</option>
                                                 <option value="Andhra Predhesh">Andhra Predhesh</option>
                                                 <option value="Arunachal Predesh">Arunachal Predesh</option>
                                                 <option value="Assam">Assam</option>
@@ -497,6 +494,7 @@
                 document.getElementById(divId).style.display = 'block';
             } else {
                 document.getElementById(divId).style.display = 'none';
+                document.getElementById("validationCustom05").value = '';
             }
         }
 
@@ -505,6 +503,7 @@
                 document.getElementById(divId).style.display = 'block';
             } else {
                 document.getElementById(divId).style.display = 'none';
+                document.getElementById("validationCustom05").value = '';
             }
         }
 
@@ -513,6 +512,7 @@
                 document.getElementById(divId).style.display = 'block';
             } else {
                 document.getElementById(divId).style.display = 'none';
+                document.getElementById("validationCustom05").value = '';
             }
         }
 
@@ -632,19 +632,26 @@
         $(document).on('change', '#openbalance',function () {
             openbal = $("#openbalance").val()
             if($('#bal').val()=='credit'){
-                document.getElementById("openbalance").value = "-"+openbal
+                if(openbal.slice(0,1) != '-'){
+                    document.getElementById("openbalance").value = "-"+openbal
+                }else{
+                    document.getElementById("openbalance").value = openbal
+                }
             }else{
                 document.getElementById("openbalance").value = openbal
             }
         });
 
         $(document).on('change', '#bal',function () {
-            if($('#bal').val()=='credit'){
-                openbal = $("#openbalance").val()
-                document.getElementById("openbalance").value = "-"+openbal
-            }else{
-                openbal = $("#openbalance").val()
-                document.getElementById("openbalance").value = openbal.slice(1,)
+            openbal = $("#openbalance").val()
+            if(openbal != ""){
+                if($('#bal').val()=='credit'){
+                    openbal = $("#openbalance").val()
+                    document.getElementById("openbalance").value = "-"+openbal
+                }else{
+                    openbal = $("#openbalance").val()
+                    document.getElementById("openbalance").value = openbal.slice(1,)
+                }
             }
         });
     </script>
