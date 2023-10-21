@@ -89,8 +89,6 @@
                                 <div class="dropdown-menu " style="background-color: black;">
                                     <a class="dropdown-item" href="{% url 'gosalesorder' %}"
                                         style="height: 40px; font-size: 15px; color: white; text-align: center;" >All</a>
-                                <a class="dropdown-item" href="{% url 'sales_num_asc' %}"
-                                    style="height: 40px; font-size: 15px; color: white; text-align: center;" >Sales Order Number </a>
                                 <!-- <a class="dropdown-item  " href="{% url 'sales_num_desc' %}"
                                     style="height: 40px; font-size: 15px; color: white; text-align: center;" >Sales Order Number <icon class=" fas fa-arrow-up"></icon></a> -->
 
@@ -155,10 +153,9 @@
                                     {% if sale.cid_id == cmp1.cid %}
                                         <tr  class="table-row " data-href="" >
                                             <td style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'sales_order_view' sale.id %}"> {{ sale.saledate | date:'d-m-Y' }}</a></td>
-
                                             <td style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'sales_order_view' sale.id %}"> {{ sale.saleno }}</a></td>
                                             <td style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'sales_order_view' sale.id %} ">  {{ sale.reference_number }}</a></td>
-                                            <td style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'sales_order_view' sale.id %}"> {{ sale.salename }}</a></td>
+                                            <td style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'sales_order_view' sale.id %}"> {{ sale.cust }}</a></td>
                                             <td style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'sales_order_view' sale.id %} "> {{ sale.status }}</a></td>
                                             <td style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'sales_order_view' sale.id %}"> {{ sale.salestotal }}</a></td>
                                             

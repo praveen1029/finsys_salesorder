@@ -27635,6 +27635,9 @@ def estmate_filter3(request):
 def gosalesorder(request):
     cmp1 = company.objects.get(id=request.session["uid"])
     sel1 = salesorder.objects.filter(cid=cmp1).values()
+    for s in sel1:
+        cust = " " . join(s['salename'].split(" ")[1:])
+        s['cust'] = cust
     context = {
         'sel1' :sel1,
         'cmp1': cmp1
@@ -27642,6 +27645,34 @@ def gosalesorder(request):
         }
 
     return render(request,'app1/gosalesorder.html',context )
+
+
+def payment_term_for_sales(request):
+    
+    if request.method == 'POST':
+        cmp1 = company.objects.get(id=request.session["uid"])
+        terms = json.loads(request.POST.get('terms', '[]'))
+        days = json.loads(request.POST.get('days', '[]'))
+        pay_term=terms[0]
+        if len(terms) == len(days):
+            for term, day in zip(terms, days):
+                created = PaymentTerms.objects.get_or_create(term=term, days=day,cid =cmp1 )
+            return JsonResponse({"message": "success","pay_term":pay_term})
+        print(pay_term)
+    return JsonResponse({"message": "success",})    
+
+
+def terms_dropdowns(request):
+    cmp1 = company.objects.get(id=request.session["uid"])
+    terms = PaymentTerms.objects.filter(cid =cmp1 )
+    term_data = []
+    day_data = []
+    for i in terms:
+        term_data.append(i.term)
+        day_data.append(i.days)
+    data = {'term_data': term_data,"day_data":day_data}
+    return JsonResponse(data)
+    
 
 def newsalesorder(request):
     cmp1 = company.objects.get(id=request.session["uid"])
@@ -27659,16 +27690,22 @@ def newsalesorder(request):
     acc  = accounts1.objects.filter(acctype='Cost of Goods Sold',cid=cmp1)
     acc1  = accounts1.objects.filter(acctype='Sales',cid=cmp1)
 
+    
+
+    ref = salesorder.objects.last()
+    if ref:
+        ref_no = int(ref.reference_number) + 1
+    else:
+        ref_no = 1
 
 
+    terms  = PaymentTerms.objects.filter(cid=cmp1)
+
+    
 
 
     context = {'sel1': sel1, 'customers': customers, 'cmp1': cmp1, 'inv': inv, 'bun': bun, 'noninv': noninv,'item':item,
-                   'ser': ser, 'tod': tod,
-                   'unit':unit,'acc':acc,'acc1':acc1,
-                   }
-        
-    print(sel1)
+                'ser': ser, 'tod': tod,'unit':unit,'acc':acc,'acc1':acc1,'ref_no':ref_no,'terms':terms}
 
     return render(request,'app1/salesorder.html',context )
 
@@ -27851,9 +27888,9 @@ def sale_create_item(request):
 def sales_order_view(request,id):
     cmp1 = company.objects.get(id=request.session['uid'])
     upd = salesorder.objects.get(id=id, cid=cmp1)
-    cust = customer.objects.get(customerid = upd.salename.split(" ")[0])
 
     saleitem = sales_item.objects.filter(salesorder=id)
+    cust = customer.objects.get(customerid = saleitem.cid)
 
     context ={
         'sale':upd,
@@ -38219,11 +38256,11 @@ def customers21(request):
         if customer.objects.filter(firstname=firstname, lastname=lastname, cid=cmp1).exists():
             return redirect('gocustomers')
         else:
-             
             cust = customer(title=request.POST.get('title'), firstname=firstname,
                             lastname=lastname, company=request.POST.get('company_name'),
                             location=request.POST.get('location'), gsttype=request.POST.get('gsttype'),
                             gstin=request.POST.get('gstin'), panno=request.POST.get('panno'),
+                            opening_balance=request.POST.get('openbalance'), credit_limit=request.POST.get('credit_limit'),
                             email=request.POST.get('email'),website=request.POST.get('website'),
                             mobile=request.POST.get('mobile'),street=request.POST.get('street'),
                             city=request.POST.get('city'),state=request.POST.get('state'),
@@ -38231,7 +38268,6 @@ def customers21(request):
                             shipstreet=request.POST.get('shipstreet'), shipcity=request.POST.get('shipcity'),
                             shipstate=request.POST.get('shipstate'),shippincode=request.POST.get('shippincode'), 
                             shipcountry=request.POST.get('shipcountry'),cid=cmp1)
-            cust.save()
             
             customer1 = customer.objects.get(customerid = cust.customerid,cid=cmp1)
                                     
@@ -40634,16 +40670,19 @@ def cust_details(request):
         else:
             return redirect('/')
         comp = company.objects.get(id=request.session['uid'])
-        id = request.POST.get('id').split(" ")[0]
-        cust = customer.objects.get(customerid = id, cid = request.session['uid'])
+        cust_id = request.POST.get('id').split(" ")[0]
+        cust = customer.objects.get(customerid=cust_id, cid = request.session['uid'])
         email = cust.email
         street = cust.street
         city = cust.city
         state = cust.state
         pincode = cust.pincode
         country = cust.country
+        gsttype = cust.gsttype
+        gstno = cust.gstin
+        shipstate = cust.shipstate
        
-    return JsonResponse({'email': email,'street': street,'city':city,'pincode': pincode,"state": state,'country' : country},safe=False)
+    return JsonResponse({'email': email,'street': street,'city':city,'pincode': pincode,"state": state,'country' : country,'gsttype':gsttype,'gstno':gstno,'shipstate':shipstate},safe=False)
 
 # (22-07-23) Nithya--- customer, invoices, sales order, credit note,estimate (correction)--
 

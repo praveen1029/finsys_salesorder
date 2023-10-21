@@ -1093,6 +1093,10 @@ class estimate_item(models.Model):
     discount = models.CharField(max_length=100,null=True,default=0)
     total = models.CharField(max_length=100,null=True,default=0)
 
+class PaymentTerms(models.Model):
+    cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
+    term = models.CharField(max_length=100,null=True)
+    days = models.IntegerField(null=True)
 
 class salesorder(models.Model):
 

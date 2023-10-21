@@ -372,6 +372,11 @@ urlpatterns = [
 
     path('gocustomers2',views.gocustomers2,name='gocustomers2'),
 
+    path('payment_term_for_sales',views.payment_term_for_sales,name='payment_term_for_sales'),
+    path('terms_dropdowns',views.terms_dropdowns,name='terms_dropdowns'),
+
+
+
     
 
     path('gstverification',views.gstverification,name='gstverification'),
