@@ -374,6 +374,12 @@ urlpatterns = [
 
     path('payment_term_for_sales',views.payment_term_for_sales,name='payment_term_for_sales'),
     path('terms_dropdowns',views.terms_dropdowns,name='terms_dropdowns'),
+    path('bankdata',views.bankdata,name='bankdata'),
+    path('purchase_unit',views.purchase_unit,name='purchase_unit'),
+    path('purchase_unit_dropdown',views.purchase_unit_dropdown,name='purchase_unit_dropdown'),
+    path('stockdata',views.stockdata,name='stockdata'),
+    path('convert_to_inv/<int:pk>',views.convert_to_inv,name='convert_to_inv'),
+    path('convert_to_reccinv/<int:pk>',views.convert_to_reccinv,name='convert_to_reccinv'),
 
 
 

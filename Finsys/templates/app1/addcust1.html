@@ -1,70 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sortable Table</title>
+    <title>Filter Table by Date Range</title>
 </head>
 <body>
-    <label for="sortSelect">Sort By:</label>
-    <select id="sortSelect">
-        <option value="date">Date</option>
-        <option value="name">Name</option>
-    </select>
+    <input type="date" id="startDate">
+    <input type="date" id="endDate">
+    <button onclick="filterTable()">Filter</button>
 
-    <table id="myTable">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>2023-01-15</td>
-                <td>John</td>
-            </tr>
-            <tr>
-                <td>2022-12-20</td>
-                <td>Alice</td>
-            </tr>
-            <tr>
-                <td>2023-02-05</td>
-                <td>Bob</td>
-            </tr>
-            <!-- Add more rows here -->
-        </tbody>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Data</th>
+        </tr>
+        <tr>
+            <td>2023-08-01</td>
+            <td>Row 1</td>
+        </tr>
+        <tr>
+            <td>2023-08-10</td>
+            <td>Row 2</td>
+        </tr>
+        <tr>
+            <td>2023-08-15</td>
+            <td>Row 3</td>
+        </tr>
+        <tr>
+            <td>2023-08-25</td>
+            <td>Row 4</td>
+        </tr>
     </table>
 
     <script>
-        // Get the table and select elements
-        var table = document.getElementById('myTable');
-        var select = document.getElementById('sortSelect');
+        function filterTable() {
+            const startDate = new Date(document.getElementById('startDate').value);
+            const endDate = new Date(document.getElementById('endDate').value);
 
-        // Add an event listener to the select element
-        select.addEventListener('change', function () {
-            var sortBy = select.value;
+            const table = document.querySelector('table');
+            const rows = table.querySelectorAll('tr');
 
-            // Get the rows and sort them based on the selected option
-            var rows = Array.from(table.querySelectorAll('tbody tr'));
-            rows.sort(function (a, b) {
-                var cellA = a.cells[sortBy === 'date' ? 0 : 1].textContent;
-                var cellB = b.cells[sortBy === 'date' ? 0 : 1].textContent;
+            rows.forEach((row, index) => {
+                if (index === 0) return; // Skip the header row
 
-                if (sortBy === 'date') {
-                    return new Date(cellA) - new Date(cellB);
+                const dateCell = new Date(row.cells[0].textContent);
+
+                if (dateCell >= startDate && dateCell <= endDate) {
+                    row.style.display = ''; // Display rows within the date range
                 } else {
-                    return cellA.localeCompare(cellB);
+                    row.style.display = 'none'; // Hide rows outside the date range
                 }
             });
-
-            // Clear the table body
-            var tbody = table.querySelector('tbody');
-            tbody.innerHTML = '';
-
-            // Append the sorted rows to the table
-            rows.forEach(function (row) {
-                tbody.appendChild(row);
-            });
-        });
+        }
     </script>
 </body>
 </html>

@@ -1,7 +1,8 @@
 {% extends 'app1/base.html' %}
 {% block body %}
+{% load social_share %}
     {% load static %}
-
+    {% if user.is_authenticated %}
     <style>
         .card-registration .select-input.form-control[readonly]:not([disabled]) {
             font-size: 1rem;
@@ -142,9 +143,20 @@
             document.getElementById('statment').style.display = 'none';
             document.getElementById('transation').style.display = 'none';
             document.getElementById('form1').style.display = 'none';
+            document.getElementById('printlink').style.display = 'none';
+            document.getElementById('pdflink').style.display = 'none';
+            document.getElementById('sharelink').style.display = 'none';
             document.getElementById('detailslink').style.backgroundColor='rgba(22,37,50,255)'
             document.getElementById('transactionlink').style.backgroundColor='transparent'
             document.getElementById('statementlink').style.backgroundColor='transparent'
+            
+            top_element = document.getElementById('top')
+            top_element.classList.remove('col-md-4')
+            top_element.classList.add('col-md-7')
+
+            bottom_element = document.getElementById('bottom')
+            bottom_element.classList.remove('col-md-8')
+            bottom_element.classList.add('col-md-5')
         }
         
         function Statment() {
@@ -152,18 +164,40 @@
             document.getElementById('statment').style.display = 'block';
             document.getElementById('transation').style.display = 'none';
             document.getElementById('form1').style.display = 'block';
+            document.getElementById('printlink').style.display = 'block';
+            document.getElementById('pdflink').style.display = 'block';
+            document.getElementById('sharelink').style.display = 'block';
             document.getElementById('detailslink').style.backgroundColor='transparent'
             document.getElementById('transactionlink').style.backgroundColor='transparent'
             document.getElementById('statementlink').style.backgroundColor='rgba(22,37,50,255)'
+
+            top_element = document.getElementById('top')
+            top_element.classList.remove('col-md-7')
+            top_element.classList.add('col-md-4')
+
+            bottom_element = document.getElementById('bottom')
+            bottom_element.classList.remove('col-md-5')
+            bottom_element.classList.add('col-md-8')
         }
         function transaction() {
             document.getElementById('details').style.display = 'none';
             document.getElementById('statment').style.display = 'none';
             document.getElementById('transation').style.display = 'block';
             document.getElementById('form1').style.display = 'none';
+            document.getElementById('printlink').style.display = 'none';
+            document.getElementById('pdflink').style.display = 'none';
+            document.getElementById('sharelink').style.display = 'none';
             document.getElementById('detailslink').style.backgroundColor='transparent'
             document.getElementById('transactionlink').style.backgroundColor='rgba(22,37,50,255)'
-            document.getElementById('statementlink').style.backgroundColor='transparent'         
+            document.getElementById('statementlink').style.backgroundColor='transparent'  
+            
+            top_element = document.getElementById('top')
+            top_element.classList.remove('col-md-4')
+            top_element.classList.add('col-md-7')    
+            
+            bottom_element = document.getElementById('bottom')
+            bottom_element.classList.remove('col-md-8')
+            bottom_element.classList.add('col-md-5')
         }
         function filterDate(element) {
             if (element.value == 'Custom') {
@@ -250,44 +284,75 @@
                 <div class="card-title">
                     <center><h2 class="mb-0">{{ customer.title }}. {{ customer.firstname }} {{ customer.lastname }}</h2></center>
                     <hr>
-                    <div class="btn-group" style="float: left; ">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-7" style="float: left; " id="top">
+    
+                                <a style="padding: 10px; cursor: pointer; border-radius: 1vh; background-color: rgba(22,37,50,255);" onclick="Details()" id="detailslink" >Details</a>
+                                <a style="padding: 10px; cursor: pointer; border-radius: 1vh;" onclick="transaction()" id="transactionlink" > Transactions</a>
+                                <a style="padding: 10px; cursor: pointer; border-radius: 1vh;" onclick="Statment()" id="statementlink" > Statement</a>
+                            </div> 
+    
+                            <div class="col-md-5" id="bottom">
+                                <div style="float: right; margin-left: 2vh;">
+                                    <div class="dropdown p-0 nav-item"  id="sharelink" style="display: none;">
+                                        <li  class=" dropdown-toggle btn btn-outline-info rounded-pill text-grey fa fa-share" data-toggle="dropdown"> Share</li>
+                                        <ul class="dropdown-menu" style="background-color: black;">
+                                            <li style="text-align: center;" > {% post_to_whatsapp object_or_url "WhatsApp" %}</li>
+                                            <li style="text-align: center;" >{% send_email object.title "Customer Details: {{object.title}}. Check it out!" object_or_url "Email" %}</li>
+                                        </ul>
+                                    </div>
+                                </div>
 
-                        <a style="padding: 10px; cursor: pointer; border-radius: 1vh; background-color: rgba(22,37,50,255);" onclick="Details()" id="detailslink" >Details</a>
-                        <a style="padding: 10px; cursor: pointer; border-radius: 1vh;" onclick="transaction()" id="transactionlink" > Transactions</a>
-                        <a style="padding: 10px; cursor: pointer; border-radius: 1vh;" onclick="Statment()" id="statementlink" > Statement</a>
-                    </div> 
+                                <div style="float: right; margin-left: 2vh;">
+                                    <a  class=" btn btn-outline-info rounded-pill text-grey fa fa-file" role="button" id="pdflink" style="display: none;"> &nbsp;PDF</a> 
 
-                    <div class="btn-group" style="float: right; margin-top: -2vh; ">
-                        <center>
-                            <a href="{% url 'editcustomer' customer.customerid %}" class=" fa fa-pencil btn btn-outline-info rounded-pill text-grey mt-3 mb-3" role="button">
-                                Edit
-                            </a>&nbsp;&nbsp;&nbsp;
-                            {% if customer.status == act%}
-                            <a href="{% url 'inactive_cust' customer.customerid %}" class=" fa fa-exchange btn btn-outline-info rounded-pill text-grey mt-3 mb-3" role="button">&nbsp;Activate</a> &nbsp;&nbsp;&nbsp;
-                            {% else %}
-                            <a href="{% url 'active_cust' customer.customerid %}" class=" fa fa-exchange btn btn-outline-info rounded-pill text-grey mt-3 mb-3" role="button">&nbsp;Inactivate</a> &nbsp;&nbsp;&nbsp;
-                            {% endif %}
-                            
-                            <a   class="btn btn-outline-info rounded-pill text-grey mt-3 mb-3" role="button"> 
+                                </div>
 
-                                <form  action="{% url 'deletecustomer' customer.customerid %}"   > 
-                                    <i class="fa fa-trash-o delete" style="font-size: medium;"> Delete</i>
-                                    <input name="_method" type="hidden" value="DELETE">
-                                    </form> </a>
-                        </center>
-                        <button type="button"
-                                class="btn btn-outline-info rounded-pill text-grey mt-3 mb-3 ml-3  dropdown-toggle dropdown-toggle-split fa fa-paperclip"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: 8px;">
-                            <span class="sr-only ">Toggle Dropdown</span>
-                            Attach file
-                        </button>
-                        <div class="dropdown-menu" >
-                            <a class="dropdown-item"  style="cursor: pointer;" data-toggle="modal" data-target="#exampleModal">Attach file</a>
-                            {% if customer.file != "default.jpg" %}
-                            <a class="dropdown-item fa fa-download" style="cursor: pointer;"download  href="{{customer.file.url}}" >Download file</a>
-                            {% endif %}
-                        </div>
-                    </div> 
+                                <div style="float: right; margin-left: 2vh;">
+                                    <a class=" btn btn-outline-info rounded-pill text-grey fa fa-print  " role="button" id="printlink" style="display: none; ">&nbsp;Print</a>
+
+                                </div>
+
+                                <div style="float: right; margin-left: 2vh;">
+                                    <button type="button"
+                                    class="btn btn-outline-info rounded-pill text-grey dropdown-toggle dropdown-toggle-split fa fa-paperclip" 
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="sr-only ">Toggle Dropdown</span>
+                                        Attach file
+                                    </button>
+    
+                                    <div class="dropdown-menu" >
+                                        <a class="dropdown-item"  style="cursor: pointer;" data-toggle="modal" data-target="#exampleModal">Attach file</a>
+                                        {% if customer.file != "default.jpg" %}
+                                        <a class="dropdown-item fa fa-download" style="cursor: pointer;"download  href="{{customer.file.url}}" >Download file</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div style="float: right; margin-left: 2vh;">
+                                    <a href="{% url 'deletecustomer' customer.customerid %}"  class="btn btn-outline-info rounded-pill text-grey fa fa-trash" role="button" >&nbsp;Delete</a>
+                                </div>
+
+                                <div style="float: right; margin-left: 2vh;">
+                                    {% if customer.status == act%}
+                                    <a href="{% url 'inactive_cust' customer.customerid %}" class=" fa fa-exchange btn btn-outline-info rounded-pill text-grey " role="button" >&nbsp;Activate</a> 
+                                    {% else %}
+                                    <a href="{% url 'active_cust' customer.customerid %}" class=" fa fa-exchange btn btn-outline-info rounded-pill text-grey " role="button" >&nbsp;Inactivate</a> 
+                                    {% endif %}
+                                </div>
+
+                                <div style="float: right;"> 
+                                    <a href="{% url 'editcustomer' customer.customerid %}" class=" fa fa-pencil btn btn-outline-info rounded-pill text-grey  "  role="button">
+                                        Edit
+                                    </a>
+                                </div>
+    
+    
+    
+                            </div>
+                        </div> 
+                    </div>
                 </div>
             </div>
         </div>
@@ -308,7 +373,7 @@
                             <select class="form-control" id="filterstyle" onclick="filterDate(this)"
                                     list="hosting-plan"
                                     type="text">
-                                    
+                                    <option hidden>Select Report Period</option>
                                 <option><span class="bx bx-right-arrow-alt"></span>Custom</option>
                             </select>
                         </div>
@@ -324,22 +389,6 @@
                                    style="background-color: #2f516f;color: white;">
                         </div>
                         <div class="col-md-3"></div>
-                    </div>
-                    <br>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-5"></div>
-                        <div class="col-md-2">
-
-                        </div>
-                        
-                        <div class="col-md-2">
-
-                            <button class="btn btn-outline-info  rounded-pill w-100" type="submit">Search</button>
-                        </div>
-                        <div class="col-md-2">
-                            <a class="fa fa-print" style="padding: 10px; cursor: pointer; float: right; "  href="javascript:generatePDF()" id="downloadButton" > PDF</a>
-                        </div>
                     </div>
                 </form>
             </div>
@@ -604,8 +653,10 @@
                                                             <div class="widget-header widget-header-large" >
                                                                 <h6 class="widget-title ">
                                                                     Statement of Accounts<br>
-                                                                    <input  id="df" value="{{tod}}" style="border: none; background-color:#444; width: 13%;"  >to
-                                                                    <input type="text" id="dl" value="{{tod}}" style="border: none; background-color: none; background-color:#444;">
+                                                                    <div id="datediv" style="display: none;">
+                                                                        <input  id="df" style="border: none; background-color:#444; width: 13%;"  >to
+                                                                        <input type="text" id="dl" style="border: none; background-color: none; background-color:#444;">
+                                                                    </div>
                                                                 </h6>
                                             
                                                               
@@ -681,90 +732,67 @@
                                                                         <tr >
                                                                            <th>Date</th>
                                                                            <th>Transactions</th>
-                                                                           <th>Details</th>
-                                                                           <th>Amount</th>
-                                                                           <th>Payments</th>
+                                                                           <th>Number</th>
+                                                                           <th>Total</th>
                                                                            <th>Balance</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody >
-
-                                                                        <tr >
-                                                                            <td>{{tod }}</td>
-                                                                            <td>***Opening Balance***</td>
-                                                                            <td></td>
-                                                                            <td>{{bal_amount}}</td>
-                                                                            <td></td>
-                                                                            <td>{{bal_amount}}</td>
-                                                                         </tr>
-
-
-                                                                        {% for i in statment %}
+                                                                        {% for invoices in invs %}
                                                                         <tr>
-                                                                            <td>{{i.Date | date:'d-m-Y'}}</td>
-                                                                            <td>{{i.Transactions}}</td>
-                                                                            
-                                                                            <td>{% if i.inv != null  %}
-                                                                                 INV-{{i.inv.invoiceno}} due on {{i.inv.duedate}}
-                                                                                 {% endif %} 
-                                                                                 {% if i.pay != null  %}
-                                                                                 ₹{{i.Payments}} 
-                                                                                 {% endif %} 
-                                                                                </td>
-                                                                            
-                                                                            
-                                                                            <td>
-                                                                                {% if i.Amount %}
-                                                                                {{i.Amount}}
-                                                                                {% endif %}
-                                                                            </td>
-                                                                            <td>{% if i.Payments %}
-                                                                                {{i.Payments}}
-                                                                                {% endif %}
-                                                                                </td>
-                                                                            <td>{% if i.Balance %}
-                                                                                {{i.Balance}}
-                                                                                {% endif %} </td>
+                                                                            <td>{{ invoices.invoicedate | date:'d-m-Y' }}</td>
+                                                                            <td>Invoice</td>
+                                                                            <td>{{ invoices.invoiceno }}</td>
+                                                                            <td>{{ invoices.grandtotal }}</td>
+                                                                            <td>{{ invoices.baldue }}</td>
                                                                         </tr>
-                                                                    {% endfor %}
-                                                                        
-                                                                        <br>
+                                                                        {% endfor %}
+                                            
+                                                                        {% for i in payme %}
                                                                         <tr>
-                                                                            <td colspan="5">Balance Due</td>
-                                                                            <td>{{baldue}}</td>
-                        
+                                                                            <td>{{ i.paymdate  | date:'d-m-Y' }}</td>
+                                                                            <td>Customer Payment</td>
+                                                                            <td>{{ i.refno }}</td>
+                                                                            <td>{{ i.amtcredit }}</td>
+                                                                            <td>{{ i.balance }}</td>
                                                                         </tr>
+                                                                        {% endfor %}
+                                            
+                                                                        {% for estimate in est1 %}
+                                                                        <tr>
+                                                                            <td>{{ estimate.estimatedate | date:'d-m-Y' }}</td>
+                                                                            <td>Estimate</td>
+                                                                            <td>{{ estimate.estimateno }}</td>
+                                                                            <td>{{ i.amtcredit }}</td>
+                                                                            <td>{{ estimate.estimatetotal }}</td>
+                                                                        </tr>
+                                                                        {% endfor %}
+                                                                        {% for sale in sel1 %}
+                                                                        <tr>
+                                                                            <td>{{ sale.saledate | date:'d-m-Y' }}</td>
+                                                                            <td>Sales Order</td>
+                                                                            <td>{{ sale.saleno }}</td>
+                                                                            <td>{{ sale.salestotal }}</td>
+                                                                            <td>{{ sale.balance }}</td>
+                                                                        </tr>
+                                                                        {% endfor %}
+
                                                                         </tbody >
-                                                                        <tbody>
-                                                                            
-                                                                        </tbody>
                                                                     </table>
+                                                                    <br>
+                                                                    <br>
+                                                                    <br>
+                                                                    <br>
+                                                                    <br>
+                                                                    <br>
+                                                                    <br>
+                                                                    <br>
+                                                                    <br>
+                                                                    <br>
+                                                                    <br>
+                                                                    <br>
+                                                                    <br>
                                                                 </div>
-                                                                <div class="col-md-12 tab_logic">
-                                                                    <table border="0" id="tab_logic" class=" table-striped" width="100%" style="font-size:10px;color:black;">
-                                                                    <thead class="thead-dark">
-                                                                        <tr >
-                                                                           <th>Date</th>
-                                                                           <th>Transactions</th>
-                                                                           <th>Details</th>
-                                                                           <th>Amount</th>
-                                                                           <th>Payments</th>
-                                                                           <th>Balance</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody >
-                                                                            
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                                   
-                                                                
-                                                                   
-                                            
-                                                                    <div class="hr hr8 hr-double hr-dotted"></div>
-                                            
-                                                                    
-                                                            
                                                             </div>
                                                         </div>
                                                     </div>
@@ -801,12 +829,12 @@
                         <div class=" d-flex">
                             <h6 class="mb-0">Phone&nbsp;&nbsp;:&nbsp;&nbsp;</h6>
                             <p class="mb-0" style="text-align: right;">{{customer.mobile}}</p>
-                        </div>
+                        </div> <br>
 
                         <div class=" d-flex">
                             <h6 class="mb-0">Email&nbsp;&nbsp;:&nbsp;&nbsp;</h6>
                             <p class="mb-0" style="text-align: right;">{{customer.email}}</p>
-                        </div>
+                        </div><br>
 
                         <div class=" d-flex">
                             <h6 class="mb-0">Credit Limit&nbsp;&nbsp;:&nbsp;&nbsp;</h6>
@@ -814,62 +842,123 @@
                         </div>
                     </div>
                     <div  style="text-align: right;">
-                        <h6 class="mb-0 mr-5" >Address&nbsp;&nbsp;: &nbsp;&nbsp;{{customer.street}},<br>{{customer.city}},{{customer.state}},{{customer.pincode}}</h6>
-                        <h6 class="mb-0 " style="margin-right: 25vh;">GSTIN&nbsp;&nbsp;:&nbsp;&nbsp;{{customer.gstin}}</h6>
+                        <h6 class="mb-0 mr-5" >Address&nbsp;&nbsp;: &nbsp;&nbsp;{{customer.street}},<br>{{customer.city}},{{customer.state}},{{customer.pincode}}</h6><br>
+                        <h6 class="mb-0 " style="margin-right: 9vh;">GSTIN&nbsp;&nbsp;:&nbsp;&nbsp;{{customer.gstin}}</h6>
                     </div>
                 </div>
 
-                <div class="row">
-                    <table class="table table-responsive-md mt-5 table-hover text-center" id="transactiontable">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>DATE</th>
-                                <th>TYPE</th>
-                                <th>NUMBER</th>
-                                <th>TOTAL</th>
-                                <th>BALANCE</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for invoices in invs %}
-                            <tr>
-                                <td></td>
-                                <td>{{ invoices.invoicedate }}</td>
-                                <td>Invoice</td>
-                                <td>{{ invoices.invoiceno }}</td>
-                                <td>{{ invoices.grandtotal }}</td>
-                                <td>{{ invoices.baldue }}</td>
-                            </tr>
-                            {% endfor %}
-
-                            {% for i in payme %}
-                            <tr>
-                                <td></td>
-                                <td>{{ i.paymdate  | date:'d-m-Y' }}</td>
-                                <td>Customer Payment</td>
-                                <td>{{ i.refno }}</td>
-                                <td>{{ i.amtcredit }}</td>
-                                <td>{{ i.balance }}</td>
-                            </tr>
-                            {% endfor %}
-
-                            {% for estimate in est1 %}
-                            <tr>
-                                <td></td>
-                                <td>{{ estimate.estimatedate | date:'d-m-Y' }}</td>
-                                <td>Estimate</td>
-                                <td>{{ estimate.estimateno }}</td>
-                                <td>{{ i.amtcredit }}</td>
-                                <td>{{ estimate.estimatetotal }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                <div class="container-fluid">
+                    <div class="row ">
+                        <table class="table table-responsive-md mt-5 mr-5 ml-5 table-hover text-center" id="transactiontable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>DATE</th>
+                                    <th>TYPE</th>
+                                    <th>NUMBER</th>
+                                    <th>TOTAL</th>
+                                    <th>BALANCE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for invoices in invs %}
+                                <tr>
+                                    <td></td>
+                                    <td>{{ invoices.invoicedate | date:'d-m-Y' }}</td>
+                                    <td>Invoice</td>
+                                    <td>{{ invoices.invoiceno }}</td>
+                                    <td>{{ invoices.grandtotal }}</td>
+                                    <td>{{ invoices.baldue }}</td>
+                                </tr>
+                                {% endfor %}
+    
+                                {% for i in payme %}
+                                <tr>
+                                    <td></td>
+                                    <td>{{ i.paymdate  | date:'d-m-Y' }}</td>
+                                    <td>Customer Payment</td>
+                                    <td>{{ i.refno }}</td>
+                                    <td>{{ i.amtcredit }}</td>
+                                    <td>{{ i.balance }}</td>
+                                </tr>
+                                {% endfor %}
+    
+                                {% for estimate in est1 %}
+                                <tr>
+                                    <td></td>
+                                    <td>{{ estimate.estimatedate | date:'d-m-Y' }}</td>
+                                    <td>Estimate</td>
+                                    <td>{{ estimate.estimateno }}</td>
+                                    <td>{{ i.amtcredit }}</td>
+                                    <td>{{ estimate.estimatetotal }}</td>
+                                </tr>
+                                {% endfor %}
+                                {% for sale in sel1 %}
+                                <tr>
+                                    <td></td>
+                                    <td>{{ sale.saledate | date:'d-m-Y' }}</td>
+                                    <td>Sales Order</td>
+                                    <td>{{ sale.saleno }}</td>
+                                    <td>{{ sale.salestotal }}</td>
+                                    <td>{{ sale.balance }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+
+    <script>
+        function ApplyDateFilter() { 
+            const startDate = new Date(document.getElementById('fdate').value);
+            const endDate = new Date(document.getElementById('ldate').value);
+            document.getElementById("datediv").style.display = "block";
+            document.getElementById("df").value = document.getElementById('fdate').value;
+            document.getElementById("dl").value = document.getElementById('ldate').value;
+            const table = document.querySelector('#logic');
+            const rows = table.querySelectorAll('tr');
+            
+            rows.forEach((row, index) => {
+                if (index === 0) return; // Skip the header row
+                
+                const dateCell = new Date(parseDate(row.cells[0].textContent));
+
+                if (dateCell >= startDate && dateCell <= endDate) {
+                    row.style.display = ''; // Display rows within the date range
+                } else {
+                    row.style.display = 'none'; // Hide rows outside the date range
+                }
+            });
+    }
+
+    const fromDateInput = document.getElementById("fdate");
+    const toDateInput = document.getElementById("ldate");
+    fromDateInput.addEventListener("change", ApplyDateFilter);
+    toDateInput.addEventListener("change", ApplyDateFilter);
+
+    function parseDate(input) {
+
+            var parts = input.split('-');
+            return parts[1] + '/' + parts[0] + '/' + parts[2];
+
+    }
+
+</script>
+
+<script>
+    var table = document.getElementById('transactiontable');
+    var rows = table.rows;
+
+    for (var i = 1; i < rows.length; i++) {
+        var rowNumber = i;
+        rows[i].cells[0].textContent = rowNumber;
+    }
+</script>
+
 <script>
     function dispinv(){
 
@@ -893,121 +982,6 @@ document.getElementById('saletable').style.display = 'block';
 }
 
 </script>
-    <script>
-
-        const tbl1 = document.querySelector('#logic');
-        const tbl2 = document.querySelector(".tab_logic");
-        tbl2.style.display="none";
-            
-        
-        $(document).on('submit','#form_post',function(e){
-            e.preventDefault();
-            $.ajax({                      
-                type: "POST",
-                url: "{% url 'search_resept' customer.customerid %}",
-                data: {
-                    
-                    fd :$('#fdate').val(),
-                    ld :$('#ldate').val(),    
-                    'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
-                },
-        
-                success:function(response){
-                    console.log(response)
-                    data = response.ct
-                    data2 = response.invoiced
-                    data3 = response.re
-                    data4 =response.sum
-                    data5 = response.df
-                    data6 = response.dl
-                    data7 = response.invitem
-                    data8 = response.st
-                    data9 = response.baldue
-                    data10 = response.opening
-
-                    data11 = response.fst
-
-
-                    $('#tab_logic tbody').append(
-
-                    `<tr>
-                    <td>${data11}</td>
-                    <td>***Opening Balance***</td>
-                    <td></td>
-                    <td>${data10}</td>
-                    <td></td>
-                    <td>${data10}</td>
-                    </tr> `
-
-
-                    )
-                    
-                    
-                    for (i=0;i<data8.length;i++){
-                        
-                        $('#tab_logic tbody').append(
-
-                                `
-                              
-                                <tr>
-                                <td>${data8[i].Date}</td>
-                                <td>${data8[i].Transactions}</td>
-                                                                            
-                                <td>
-                                    
-                                    ${data8[i].Details2} 
-                                    
-                                    </td>
-                                                                            
-                                                                            
-                                <td>
-                                
-                                ${data8[i].Amount}
-                                </td>
-                                <td>
-
-                                    ${data8[i].Payments} 
-                               
-                                
-                                </td>
-                                <td>${data8[i].Balance} 
-                                
-                                 </td>
-                                </tr>
-                                 
-                                    `
-                                
-                            )
-                            
-
-
-                    }
-
-                   
-                    
-                    
-                    $('#tab_logic tbody').append( `<tr>
-                        <td colspan="5">Balance Due</td>
-                        <td>${data9} </td>
-                        
-                        </tr>`)
-                        tbl1.style.display="none";
-                        tbl2.style.display="block";
-                    document.getElementById('invamount').value = data2
-                    document.getElementById('received').value = data3
-                    document.getElementById('due').value = data9
-                    document.getElementById('df').value = data5 
-                    document.getElementById('dl').value = data6
-                    document.getElementById('open').value = data10
-
-                    
-                    
-                  
-                }
-              
-            });
-        });
-        </script>
     
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
@@ -1046,5 +1020,5 @@ $('.delete').click(function(event) {
 });
 
     </script> 
-
+{% endif %}
 {% endblock %}

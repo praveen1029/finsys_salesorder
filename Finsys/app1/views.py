@@ -911,8 +911,7 @@ def gosalesrecords(request):
         pay1 = payment.objects.filter(cid=cmp1).all()
         delayed1 = delayedcharge.objects.all()
         context = {'sale': emp, 'tisa': sds, 'invosales': inv, 'crd': crd1, 'pay': pay1, 'est': est1,
-                   'delayed': delayed1,
-                   'cmp1': cmp1}
+                   'delayed': delayed1,'cmp1': cmp1}
         return render(request, 'app1/salesrecords.html', context)
     except:
         return redirect('godash')
@@ -26672,7 +26671,7 @@ def customer_profile(request,id):
     invs = invoice.objects.filter(cid=cmp1,customername=su,).all() 
     payme = payment.objects.filter(cid=cmp1,customer=su,).all()  
     est1 = estimate.objects.filter(cid=cmp1,customer=su,).all()   
-    sel1 = salesorder.objects.filter(cid=cmp1,salename=su,).all() 
+    sel1 = salesorder.objects.filter(cid=cmp1,salename=str(id)+ " " +su).all() 
     context = {'customer': custo,
                 'cmp1': cmp1,
                 'inv':inv,
@@ -27646,6 +27645,74 @@ def gosalesorder(request):
 
     return render(request,'app1/gosalesorder.html',context )
 
+def convert_to_inv(request,pk):
+    sale = salesorder.objects.get(id=pk)
+    salename = sale.salename.split(" ")[1:]
+    name = ' '.join(salename)
+    inv = invoice(customername=name, email=sale.saleemail,
+        invoiceno=sale.saleno,
+        invoicedate=sale.saledate,
+        terms=sale.term_days, duedate=sale.shipmentdate, bname=sale.saleaddress,
+        placosupply=sale.placeofsupply,
+        cid=sale.cid,
+        subtotal=float(sale.subtotal),
+        note = sale.note,
+        IGST = sale.IGST,
+        CGST = sale.CGST,
+        SGST = sale.SGST,
+        #TCS = request.POST['TCS'],
+        shipping_charge = sale.shipping_charge,
+        taxamount = sale.taxamount,
+        grandtotal=sale.salestotal,
+        amtrecvd=float(sale.paidoff), 
+        baldue=sale.balance)
+    inv.save()
+
+    inv_id = invoice.objects.last()
+    sal_itm = sales_item.objects.filter(salesorder=pk)
+    for item in sal_itm:
+        inv_itm = invoice_item(invoice=inv_id, hsn=item.hsn ,qty =item.qty ,price =item.price ,total =item.total ,
+                               cid=item.cid, product =item.product , tax= item.tax ,discount =item.discount )
+        inv_itm.save()
+
+    sale.inv_status = 1
+    sale.save()
+    return redirect('gosalesorder')   
+
+
+ 
+
+def convert_to_reccinv(request,pk):
+    sale = salesorder.objects.get(id=pk)
+    salename = sale.salename.split(" ")[1:]
+    name = ' '.join(salename)
+    cust = customer.objects.get(customerid=sale.salename[0])
+
+    rec_inv = recinvoice.objects.last()
+    if rec_inv == None:
+        ord_no = 1
+    else:
+        ord_no = rec_inv.recinvoiceid+1
+
+    rec = recinvoice(customername=name, email=sale.saleemail, profilename=name, taxamount=float(sale.taxamount),
+                    baldue=sale.balance, recinvoiceno=sale.saleno, terms=sale.term_days, startdate=sale.saledate, enddate=sale.shipmentdate, bname=sale.saleaddress,
+                    placosupply=sale.placeofsupply, amtrecvd=float(sale.paidoff), subtotal=float(sale.subtotal), recinvoice_orderno = ord_no,
+                    grandtotal=sale.salestotal, IGST=sale.IGST, CGST=sale.CGST, SGST=sale.SGST, note=sale.note, cid=sale.cid, gsttype=cust.gsttype)
+
+    rec.save()
+    
+    rec = recinvoice.objects.last()
+    sal_itm = sales_item.objects.filter(salesorder=pk)
+    for item in sal_itm:
+        rec_item = recinvoice_item(recinvoice=rec ,cid=item.cid, product =item.product,  hsn=item.hsn ,qty =item.qty ,price =item.price ,total =item.total ,
+                                    tax= item.tax ,discount =item.discount )
+        rec_item.save()
+
+    sale.salcrd_status = 1
+    sale.save()
+
+    return redirect('gosalesorder')
+
 
 def payment_term_for_sales(request):
     
@@ -27658,13 +27725,31 @@ def payment_term_for_sales(request):
             for term, day in zip(terms, days):
                 created = PaymentTerms.objects.get_or_create(term=term, days=day,cid =cmp1 )
             return JsonResponse({"message": "success","pay_term":pay_term})
-        print(pay_term)
     return JsonResponse({"message": "success",})    
+
+
+def purchase_unit(request):
+    if request.method=='POST':
+        cmp1 = company.objects.get(id=request.session['uid'])
+        usymbol = request.POST.get('usymbol')
+        uname = request.POST.get('uname')
+        unit = unittable(unit_symbol=usymbol,name=uname,cid=cmp1)
+        unit.save()
+        return HttpResponse({"message": "success"})
+
+
+
+        
+def purchase_unit_dropdown(request):
+    cmp1 = company.objects.get(id=request.session["uid"])
+    option_objects = unittable.objects.filter(cid=cmp1).last()
+    options = {'symbol':option_objects.unit_symbol,'name':option_objects.name}
+    return JsonResponse(options)
 
 
 def terms_dropdowns(request):
     cmp1 = company.objects.get(id=request.session["uid"])
-    terms = PaymentTerms.objects.filter(cid =cmp1 )
+    terms = PaymentTerms.objects.filter(cid =cmp1)
     term_data = []
     day_data = []
     for i in terms:
@@ -27689,6 +27774,7 @@ def newsalesorder(request):
     unit = unittable.objects.filter(cid=cmp1)
     acc  = accounts1.objects.filter(acctype='Cost of Goods Sold',cid=cmp1)
     acc1  = accounts1.objects.filter(acctype='Sales',cid=cmp1)
+    bank = bankings_G.objects.filter(cid=cmp1)
 
     
 
@@ -27705,9 +27791,16 @@ def newsalesorder(request):
 
 
     context = {'sel1': sel1, 'customers': customers, 'cmp1': cmp1, 'inv': inv, 'bun': bun, 'noninv': noninv,'item':item,
-                'ser': ser, 'tod': tod,'unit':unit,'acc':acc,'acc1':acc1,'ref_no':ref_no,'terms':terms}
+                'ser': ser, 'tod': tod,'unit':unit,'acc':acc,'acc1':acc1,'ref_no':ref_no,'terms':terms,'bank':bank}
 
     return render(request,'app1/salesorder.html',context )
+
+
+def bankdata(request):
+    bank_name = request.GET.get('id')
+    bank = bankings_G.objects.get(bankname=bank_name)
+    data = {'bank': bank.account_number}
+    return JsonResponse(data)
 
 @login_required(login_url='regcomp')
 def new_customers2(request):
@@ -27791,6 +27884,11 @@ def createsales_record(request):
                         cid=cmp1,
                         reference_number = request.POST.get('Ref_No'),
                         note = request.POST.get('Note'),
+                        cheque_no=request.POST.get("cheque_id"),
+                        upi_no=request.POST.get("upi_id"),
+                        pay_method=request.POST.get("method"),
+
+                        term_days = request.POST.get("pay_term"),
 
                         subtotal=request.POST.get('subtotal'),
                         IGST =request.POST.get('igst'),
@@ -27799,7 +27897,17 @@ def createsales_record(request):
                         # TCS = request.POST['TCS'],
                         shipping_charge = request.POST.get("ship"),
                         taxamount = request.POST.get("taxamount"),
-                        salestotal=request.POST.get('grandtotal'),)            
+                        paidoff = request.POST.get("advance"),
+                        adjust = request.POST.get("adj"),
+                        balance = request.POST.get("balance"),
+                        salestotal=request.POST.get('grandtotal'))     
+           
+
+        if 'Draft' in request.POST:
+            sel2.status = "Draft"
+        if "Save" in request.POST:
+            sel2.status = "Approved"  
+
         if len(request.FILES) != 0:
             sel2.file=request.FILES.get('file')                    
         sel2.save()
@@ -27833,8 +27941,6 @@ def createsales_record(request):
         return redirect('gosalesorder')
     
     return redirect('gosalesorder')
-
-
 
 
 
@@ -27888,9 +27994,10 @@ def sale_create_item(request):
 def sales_order_view(request,id):
     cmp1 = company.objects.get(id=request.session['uid'])
     upd = salesorder.objects.get(id=id, cid=cmp1)
+    sale_no = upd.salename[0]
 
     saleitem = sales_item.objects.filter(salesorder=id)
-    cust = customer.objects.get(customerid = saleitem.cid)
+    cust = customer.objects.get(customerid = sale_no)
 
     context ={
         'sale':upd,
@@ -27972,19 +28079,28 @@ def sales_order_delete(request, id):
 @login_required(login_url='regcomp')
 def edit_sales_order(request, id):
     
-        cmp1 = company.objects.get(id=request.session['uid'])
-        edt = salesorder.objects.get(id=id, cid=cmp1)
-        inv = inventory.objects.filter(cid=cmp1).all()
-        bun = bundle.objects.filter(cid=cmp1).all()
-        noninv = noninventory.objects.filter(cid=cmp1).all()
-        ser = service.objects.filter(cid=cmp1).all()
-        item = itemtable.objects.filter(cid=cmp1).all()
-        itemsale = sales_item.objects.filter(salesorder=id)
-        customers = customer.objects.filter(cid=cmp1).all()
-        cust1 = customer.objects.get(customerid = edt.salename.split(" ")[0])
-        context = {'sale': edt, 'cmp1': cmp1, 'inv': inv,'cust' : cust1,'customers': customers,
-                   'noninv': noninv, 'bun': bun, 'ser': ser,'item':item,'itemsale':itemsale}
-        return render(request, 'app1/edit_sales_order.html', context)
+    cmp1 = company.objects.get(id=request.session['uid'])
+    edt = salesorder.objects.get(id=id, cid=cmp1) 
+    paylist = ['cash','cheque','upi']
+    if edt.pay_method not in paylist:
+        bank_no = bankings_G.objects.get(bankname=edt.pay_method,cid=cmp1)
+        acc_no = bank_no.account_number
+    else:
+        acc_no = ''
+
+    inv = inventory.objects.filter(cid=cmp1).all()
+    bun = bundle.objects.filter(cid=cmp1).all()
+    noninv = noninventory.objects.filter(cid=cmp1).all()
+    ser = service.objects.filter(cid=cmp1).all()
+    item = itemtable.objects.filter(cid=cmp1).all()
+    itemsale = sales_item.objects.filter(salesorder=id)
+    customers = customer.objects.filter(cid=cmp1).all()
+    cust1 = customer.objects.get(customerid = edt.salename.split(" ")[0])
+    terms = PaymentTerms.objects.filter(cid = cmp1)
+    bank = bankings_G.objects.filter(cid=cmp1)
+    context = {'sale': edt, 'cmp1': cmp1, 'inv': inv,'cust' : cust1,'customers': customers,'bank':bank,"acc_no":acc_no,
+                'noninv': noninv, 'bun': bun, 'ser': ser,'item':item,'itemsale':itemsale,'terms':terms}
+    return render(request, 'app1/edit_sales_order.html', context)
     
 
 @login_required(login_url='regcomp')
@@ -28010,6 +28126,7 @@ def updatesale(request, id):
         upd.SGST = request.POST['SGST']
         upd.TCS = request.POST['TCS']
         upd.salestotal = request.POST['grandtotal']
+
 
         if len(request.FILES) != 0:
             if upd.file != "default.jpg" :
@@ -28053,7 +28170,6 @@ def updatesale(request, id):
                         qty=ele[3],price=ele[4],tax=ele[5],total=ele[6],salesorder=saleid, cid=cmp1 )
 
                     else:
-                        print("welcome")
                         dbs=sales_item.objects.get(salesorder=saleid,product = ele[0],hsn=ele[1])
                         created = sales_item.objects.filter(id=ele[7],cid=cmp1).update(product = ele[0],hsn=ele[1],description=ele[2],
                         qty=ele[3],price=ele[4],tax=ele[5],total=ele[6])
@@ -28113,7 +28229,7 @@ def sale_convert2(request,id):
                     CGST = upd.CGST,
                     SGST = upd.SGST,
                     TCS = upd.TCS ,
-                    grandtotal=upd.salestotal ,
+                    grandtotal=upd.balance ,
                     baldue=upd.salestotal ,
 
 
@@ -33951,15 +34067,11 @@ def itemdata(request):
         else:
             return redirect('/')
         cmp1 = company.objects.get(id=request.session['uid'])
-        print(cmp1.state)
         id = request.GET.get('id')
-        print("asdsadas")
-        print(id)
         toda = date.today()
         tod = toda.strftime("%Y-%m-%d")
         # to = toda.strftime("%d-%m-%Y")
         item = itemtable.objects.get(name=id,cid=cmp1)
-        print(item)
         hsn = item.hsn
         qty = item.stock
         price = item.purchase_cost
@@ -33968,6 +34080,12 @@ def itemdata(request):
         places=cmp1.state
         return JsonResponse({"status":" not",'hsn':hsn,'qty':qty,'places':places,'price':price,'gst':gst,'sgst':sgst})
     return redirect('/')
+
+def stockdata(request):
+    id = request.GET.get('id')
+    itm = itemtable.objects.get(name=id)
+    stock = itm.stock
+    return JsonResponse({'stock':stock})
 
 def getperiod(request):
     id = request.GET.get('id')
@@ -41139,6 +41257,12 @@ def updatesales(request, id):
         upd.saledate = request.POST.get('Salesdate')
         upd.shipmentdate = request.POST.get('Shipmentdate')
         upd.placeofsupply= request.POST.get('placosupply')
+        upd.term_days= request.POST.get('pay_term')
+        upd.pay_method= request.POST.get('method')
+        upd.cheque_no= request.POST.get('cheque_id')
+        upd.upi_no= request.POST.get('upi_id')
+        upd.paidoff= request.POST.get('advance')
+        upd.balance= request.POST.get('balance')
       
 
         upd.reference_number = request.POST.get('Ref_No')
@@ -41152,6 +41276,7 @@ def updatesales(request, id):
         upd.shipping_charge = request.POST.get("ship")
         upd.taxamount = request.POST.get("taxamount")
 
+        upd.adjust = request.POST.get('adj')
         upd.salestotal = request.POST.get('grandtotal')
 
         if len(request.FILES) != 0:
@@ -41189,10 +41314,6 @@ def updatesales(request, id):
         object_ids = [obj.id for obj in sale_item]
 
         ids_to_delete = [obj_id for obj_id in object_ids if obj_id not in item_ids]
-        print(item_ids)
-        # print(sale_item)
-        print(object_ids)
-        print(ids_to_delete)
         sales_item.objects.filter(id__in=ids_to_delete).delete()
 
         

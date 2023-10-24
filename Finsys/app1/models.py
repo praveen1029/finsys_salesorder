@@ -1110,7 +1110,7 @@ class salesorder(models.Model):
     saleno = models.CharField(max_length=20,null=True)
     placeofsupply = models.CharField(max_length=100,null=True)
 
-
+    term_days = models.IntegerField(null=True)
     
 
     reference_number = models.CharField(max_length=100, default='')
@@ -1127,11 +1127,19 @@ class salesorder(models.Model):
     
     file = models.FileField(upload_to='sales',default="default.jpg")
 
+    pay_method=models.CharField(null=True,blank=True,max_length=255)
+    cheque_no=models.CharField(null=True,blank=True,max_length=255)
+    upi_no=models.CharField(null=True,blank=True,max_length=255)
+    paidoff=models.CharField(null=True,blank=True,max_length=255)
+    balance=models.CharField(null=True,blank=True,max_length=255)
+    adjust = models.CharField(null=True,blank=True,max_length=255)
+    salcrd_status = models.IntegerField(default=0)
+    inv_status = models.IntegerField(default=0)
+
     sale_status = (
         ('Draft','Draft'),
         ('Approved','Approved'),
         ('Invoiced','Invoiced'),
-
     )
     
     status =models.CharField(max_length=150,choices=sale_status,default='Draft')
