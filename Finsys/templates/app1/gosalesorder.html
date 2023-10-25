@@ -61,10 +61,6 @@
         left: 50%; */
         /* transform: translate(-50%, -50%); */
         }
-
-        .clickable-row a:hover{
-            font-size: small;
-        }
       </style>
         <div class="page-content">
             <div class="card radius-15">
@@ -165,24 +161,24 @@
                                             {% if sale.inv_status == 0 %}
                                                 {% if sale.salcrd_status == 0 %}
                                                 <td style="text-align: center;">
-                                                    <a class="text-danger" href="{% url 'convert_to_inv' sale.id %}"  >Convert to Invoice</a><br>
-                                                    <a class="text-danger" href="{% url 'convert_to_reccinv' sale.id %}">Convert to Recurring Invoice</a>
+                                                    <a class="btn btn-outline-danger text-white" href="{% url 'convert_to_inv' sale.id %}"  >Convert to Invoice</a><br>
+                                                    <a class="btn btn-outline-danger text-white" href="{% url 'convert_to_reccinv' sale.id %}">Convert to Recurring Invoice</a>
                                                 </td>
                                                 {% else %}
                                                 <td style="text-align: center;">
-                                                    <a class="text-danger" href="{% url 'convert_to_inv' sale.id %}" >Convert to Invoice</a><br>
-                                                    <span class="text-success">Completed</span>
+                                                    <a class="btn btn-outline-danger text-white" href="{% url 'convert_to_inv' sale.id %}" >Convert to Invoice</a><br>
+                                                    <span class="text-success">Converted to Recurring Invoice</span>
                                                 </td>
                                                 {% endif %}
                                             {% else %}
                                                 {% if sale.salcrd_status == 0 %}
                                                 <td style="text-align: center;">
-                                                    <span class="text-success">Completed</span><br>
-                                                    <a class="text-danger" href="{% url 'convert_to_reccinv' sale.id %}">Convert to Recurring Invoice</a>
+                                                    <span class="text-success">Converted to Invoice</span><br>
+                                                    <a class="btn btn-outline-danger text-white" href="{% url 'convert_to_reccinv' sale.id %}">Convert to Recurring Invoice</a>
                                                 </td>
                                                 {% else %}
                                                 <td style="text-align: center;">
-                                                    <span class="text-success">Completed</span>
+                                                    <span class="text-success">Converted</span>
                                                 </td>
                                                 {% endif %}
                                             {% endif %}

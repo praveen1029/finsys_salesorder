@@ -380,6 +380,7 @@ urlpatterns = [
     path('stockdata',views.stockdata,name='stockdata'),
     path('convert_to_inv/<int:pk>',views.convert_to_inv,name='convert_to_inv'),
     path('convert_to_reccinv/<int:pk>',views.convert_to_reccinv,name='convert_to_reccinv'),
+    path('balancedata',views.balancedata,name='balancedata'),
 
 
 

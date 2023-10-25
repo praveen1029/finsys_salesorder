@@ -1199,6 +1199,24 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="{% static 'assets/plugins/select2/js/select2.min.js' %}"></script>
 
+<script>
+    $(document).on('change','#Salesdate', function() {
+        var days = parseInt($('#pay_term').val());
+        order_date =new Date( document.getElementById("Salesdate").value)
+        if (!isNaN(order_date.getTime())) {
+            // Calculate the new date by adding 20 days
+            const endDate = new Date(order_date);
+            endDate.setDate(endDate.getDate() + days);
+            // Format the new date as YYYY-MM-DD
+            const formattedDate = endDate.toISOString().split("T")[0];
+            // Set the result in the second input
+            document.getElementById("Shipmentdate").value = formattedDate;
+        } else {
+                alert("Please enter a valid date.");
+        }
+    })
+</script>
+
 
 <script>
          

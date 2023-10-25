@@ -924,15 +924,12 @@ def gocustomers(request):
     try:
         cmp1 = company.objects.get(id=request.session["uid"])
         custo = customer.objects.filter(cid=cmp1).all()
-
         for i in custo:
             custname = i.firstname +" "+i.lastname
-            
             statment = cust_statment.objects.filter(customer=custname,cid=cmp1)
             debit=0
             credit=0
             total1 = 0
-            
             for j in statment :
                 if j.Amount:
                     debit+=j.Amount
@@ -942,10 +939,9 @@ def gocustomers(request):
             total1=debit-credit
             i.receivables = total1
             i.save()
-
-
         context = {'customers': custo, 'cmp1': cmp1}
         return render(request, 'app1/customers.html', context)
+    
     except:
         return redirect('godash')
 
@@ -26559,6 +26555,37 @@ def gocustomers1(request):
     except:
         return redirect('godash')
 
+def balancedata(request):
+    name = request.GET.get('name')
+    id = request.GET.get('id')
+    sale_name = id+' '+name
+    inv_bal = 0
+    pay_bal = 0
+    est_bal = 0
+    sal_bal = 0
+
+    inv = invoice.objects.filter(customername=name)
+    if inv != None:
+        for i in inv:
+            inv_bal += float(i.baldue)
+
+    pay = payment.objects.filter(customer=name)
+    if pay != None:
+        for p in pay:
+            pay_bal += float(p.balance)
+
+    est = estimate.objects.filter(customer=name)
+    if est != None:
+        for e in est:
+            est_bal += float(e.estimatetotal)
+
+    sal = salesorder.objects.filter(salename=sale_name)
+    if sal != None:
+        for s in sal:
+            sal_bal += float(s.balance)
+        
+    final_bal = inv_bal + pay_bal + est_bal + sal_bal
+    return JsonResponse({'final_bal':final_bal})
 
 
 @login_required(login_url='regcomp')
