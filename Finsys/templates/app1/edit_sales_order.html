@@ -145,7 +145,13 @@
 
             <div class="row mt-3">
                 <div class="col-md-4">
-                    <label class="col-form-label">Customer</label>
+                    <div class="d-flex">
+                        <label class="col-form-label">Sales Order No.</label><span class="text-danger mt-1 ml-3" id="dangerdiv" style="display: none;"><span class="text-white"> (</span>Changing this value is not Recommended <span class="text-white">)</span></span>
+                    </div>
+                    <input type="number" class="form-control" name="ord_no" value="{{sale.saleno}}"  id="ord_no" style="background-color: #43596c;"><br>
+                   
+
+                    <label class="col-form-label mt-2">Customer</label>
                     <div class="d-flex">
                       <select name="customer" id="customer" class="form-control" style="width: 95%;">
                           <option value="{{ sale.salename }}" selected hidden>{{cust.title}} {{cust.firstname}} {{cust.lastname}}
@@ -160,34 +166,83 @@
                       <a data-toggle="modal" href="#customercreation">
                           <button type="button" class="btn btn-outline-secondary ml-1">+</button>
                       </a>
-                    </div><br><br>
-                    <label class="col-form-label">GST Type</label>
-                    <input type="text" class="form-control" id="gsttype" name="gsttype" style="background-color: #43596c;" value="{{cust.gsttype}}" readonly>
+                    </div><br>
+
+                    <label class="col-form-label mt-2">Place of supply</label>
+                    <select type="text" class="form-control" id="plosu" name="placosupply" style="background-color: #43596c; color: white;" onchange="state(this)">
+                      <option value="{{ sale.placeofsupply}}" selected> {{ sale.placeofsupply}}</option>
+                      <option value="Andaman and Nicobar Islads">Andaman and Nicobar Islads</option>
+                      <option value="Andhra Predhesh">Andhra Predhesh</option>
+                      <option value="Arunachal Predesh">Arunachal Predesh</option>
+                      <option value="Assam">Assam</option>
+                      <option value="Bihar">Bihar</option>
+                      <option value="Chandigarh">Chandigarh</option>
+                      <option value="Chhattisgarh">Chhattisgarh</option>
+                      <option value="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
+                      <option value="Damn anad Diu">Damn anad Diu</option>
+                      <option value="Delhi">Delhi</option>
+                      <option value="Goa">Goa</option>
+                      <option value="Gujarat">Gujarat</option>
+                      <option value="Haryana">Haryana</option>
+                      <option value="Himachal Predesh">Himachal Predesh</option>
+                      <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                      <option value="Jharkhand">Jharkhand</option>
+                      <option value="Karnataka">Karnataka</option>
+                      <option value="Kerala">Kerala</option>
+                      <option value="Ladakh">Ladakh</option>
+                      <option value="Lakshadweep">Lakshadweep</option>
+                      <option value="Madhya Predesh">Madhya Predesh</option>
+                      <option value="Maharashtra">Maharashtra</option>
+                      <option value="Manipur">Manipur</option>
+                      <option value="Meghalaya">Meghalaya</option>
+                      <option value="Mizoram">Mizoram</option>
+                      <option value="Nagaland">Nagaland</option>
+                      <option value="Odisha">Odisha</option>
+                      <option value="Puducherry">Puducherry</option>
+                      <option value="Punjab">Punjab</option>
+                      <option value="Rajasthan">Rajasthan</option>
+                      <option value="Sikkim">Sikkim</option>
+                      <option value="Tamil Nadu">Tamil Nadu</option>
+                      <option value="Telangana">Telangana</option>
+                      <option value="Tripura">Tripura</option>
+                      <option value="Uttar Predesh">Uttar Predesh</option>
+                      <option value="Uttarakhand">Uttarakhand</option>
+                      <option value="West Bengal">West Bengal</option>
+                      <option value="Other Territory">Other Territory</option>
+                    </select>
+
 
                 </div>
                 <div class="col-md-4">
-                  <label class="col-form-label">Email</label>
-                  <input type="text" class="form-control" id="cust_email" name="email" placeholder="Email" value="{{ sale.saleemail }}" style="background-color: #43596c;"  readonly><br><br>
-                {% if cust.gstin %}
-                <div id="gstnodiv" >
-                    <label class="col-form-label">GSTIN</label>
-                    <input type="text" class="form-control" id="gstno" name="gstno" style="background-color: #43596c;" value="{{cust.gstin}}" readonly>
-                </div>
-                {% else %}
-                  <div id="gstnodiv" style="display: none;">
-                    <label class="col-form-label">GSTIN</label>
-                    <input type="text" class="form-control" id="gstno" name="gstno" style="background-color: #43596c;" readonly>
-                </div>
-                {% endif %}
+                    <label class="col-form-label">Reference Number</label>
+                    <input type="text" class="form-control" name="Ref_No" value="{{ sale.reference_number}}" style="background-color: #43596c;"  readonly ><br>
+
+                  <label class="col-form-label mt-2">Email</label>
+                  <input type="text" class="form-control" id="cust_email" name="email" placeholder="Email" value="{{ sale.saleemail }}" style="background-color: #43596c;"  readonly><br>
+
+                  
+                  <label class="col-form-label mt-2">GST Type</label>
+                  <input type="text" class="form-control" id="gsttype" name="gsttype" style="background-color: #43596c;" value="{{cust.gsttype}}" readonly>
               </div>
                 
                 <div class="col-md-4">
-                  <label class="col-form-label">Billing Address</label>
-                  <label for="billingaddress"></label>
-                  <textarea class="form-control" rows="7" id="bname" name="billingaddress" value="{{ sale.saleaddress }}" style="background-color: #43596c;" readonly>{{ sale.saleaddress }}</textarea>
-              </div>
+                    <label class="col-form-label">Billing Address</label>
+                    <label for="billingaddress"></label>
+                    <textarea class="form-control" rows="6" id="bname" name="billingaddress" value="{{ sale.saleaddress }}" style="background-color: #43596c; margin-bottom: 10px;" readonly>{{ sale.saleaddress }}</textarea>
+                    {% if cust.gstin %}
+                    <div id="gstnodiv" >
+                        <label class="col-form-label">GSTIN</label>
+                        <input type="text" class="form-control" id="gstno" name="gstno" style="background-color: #43596c;" value="{{cust.gstin}}" readonly>
+                    </div>
+                    {% else %}
+                        <div id="gstnodiv" style="display: none;">
+                        <label class="col-form-label">GSTIN</label>
+                        <input type="text" class="form-control" id="gstno" name="gstno" style="background-color: #43596c;" readonly>
+                    </div>
+                    {% endif %}
+                </div>
             </div>
-
+            <br>
             <div class="row mt-3">
                 <div class="col-md-3">
                     <label class="col-form-label">Sales Order Date</label>
@@ -196,54 +251,6 @@
                 <div class="col-md-3">
                     <label class="col-form-label"> Expected Shipment Date </label>
                     <input type="date" class="form-control" value="{{ sale.shipmentdate | date:'Y-m-d' }}" id="Shipmentdate"  name="Shipmentdate" style="background-color: #43596c;" required readonly><br>
-                </div>
-                <div class="col-md-3">
-                    <label class="col-form-label">Reference Number</label>
-                    <input type="text" class="form-control" name="Ref_No" value="{{ sale.reference_number}}" style="background-color: #43596c;"  readonly ><br>
-                </div>
-                <div class="col-md-3 ">
-                  <label class="col-form-label">Place of supply</label>
-                  <select type="text" class="form-control" id="plosu" name="placosupply" style="background-color: #43596c; color: white;" onchange="state(this)">
-                    <option value="{{ sale.placeofsupply}}" selected> {{ sale.placeofsupply}}</option>
-                    <option value="Andaman and Nicobar Islads">Andaman and Nicobar Islads</option>
-                    <option value="Andhra Predhesh">Andhra Predhesh</option>
-                    <option value="Arunachal Predesh">Arunachal Predesh</option>
-                    <option value="Assam">Assam</option>
-                    <option value="Bihar">Bihar</option>
-                    <option value="Chandigarh">Chandigarh</option>
-                    <option value="Chhattisgarh">Chhattisgarh</option>
-                    <option value="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
-                    <option value="Damn anad Diu">Damn anad Diu</option>
-                    <option value="Delhi">Delhi</option>
-                    <option value="Goa">Goa</option>
-                    <option value="Gujarat">Gujarat</option>
-                    <option value="Haryana">Haryana</option>
-                    <option value="Himachal Predesh">Himachal Predesh</option>
-                    <option value="Jammu and Kashmir">Jammu and Kashmir</option>
-                    <option value="Jharkhand">Jharkhand</option>
-                    <option value="Karnataka">Karnataka</option>
-                    <option value="Kerala">Kerala</option>
-                    <option value="Ladakh">Ladakh</option>
-                    <option value="Lakshadweep">Lakshadweep</option>
-                    <option value="Madhya Predesh">Madhya Predesh</option>
-                    <option value="Maharashtra">Maharashtra</option>
-                    <option value="Manipur">Manipur</option>
-                    <option value="Meghalaya">Meghalaya</option>
-                    <option value="Mizoram">Mizoram</option>
-                    <option value="Nagaland">Nagaland</option>
-                    <option value="Odisha">Odisha</option>
-                    <option value="Puducherry">Puducherry</option>
-                    <option value="Punjab">Punjab</option>
-                    <option value="Rajasthan">Rajasthan</option>
-                    <option value="Sikkim">Sikkim</option>
-                    <option value="Tamil Nadu">Tamil Nadu</option>
-                    <option value="Telangana">Telangana</option>
-                    <option value="Tripura">Tripura</option>
-                    <option value="Uttar Predesh">Uttar Predesh</option>
-                    <option value="Uttarakhand">Uttarakhand</option>
-                    <option value="West Bengal">West Bengal</option>
-                    <option value="Other Territory">Other Territory</option>
-                  </select>
                 </div>
                 <div class="col-md-3">
                     <label class="col-form-label">Payment Term</label>
@@ -397,12 +404,8 @@
                 </tbody>
                 <tr>
                   <td style="border: none;"><a class="btn btn-outline-secondary ml-1" role="button" id="add">+</a></td>
-              </tr>
-                
-              
+                </tr>
               </table>
-              
-
             </div>
           </div>
           <div class="row clearfix" style="margin-top:20px">
@@ -2494,6 +2497,27 @@
 // </script>-->
 
 
+<script type="text/javascript">
+    $(document).on('change','#ord_no', function() {
+        ord = '{{sale.saleno}}'
+        ord_value = $('#ord_no').val();
+        if(ord_value != ord){
+            document.getElementById('dangerdiv').style.display = 'block';
+        }else{
+            document.getElementById('dangerdiv').style.display = 'none';
+        }
+        var sale_list = "{{sale_list}}";
+        salelist = sale_list.split(",");
+        for(let i=0; i<salelist.length; i++){
+            if (ord_value == salelist[i]){
+                alert('Sale Order Number already in use.')
+                $('#ord_no').val(ord)
+                document.getElementById('dangerdiv').style.display = 'none';
+            }
+        }
+    })
+</script>
+
 <script>
     $(document).on('change','#Salesdate', function() {
         var days = parseInt($('#pay_term').val());
@@ -2759,9 +2783,6 @@ function reloadterms(){
               </div>`
           $('#termdrop').append(new_row)
 
-          var termdroprow = document.getElementById('newtermrow');
-          term_container.removeChild(termdroprow);
-
           let select = document.getElementById("pay_term");
 
           while (select.options.length > 0) {
@@ -2828,6 +2849,11 @@ function reloadterms(){
         if( parseFloat(qty) > parseFloat(avl) ){
             alert("Quantity Greater than Available Quantity")
             document.getElementById(id).value = 0
+            document.getElementById(`tax1${id_val}`).value = 0
+            document.getElementById(`tax2${id_val}`).value = 0
+            document.getElementById(`disc${id_val}`).value = 0
+            document.getElementById(`taxamount${id_val}`).value = 0
+            document.getElementById(`total${id_val}`).value = 0
             calc()
         }
     }
@@ -3106,106 +3132,79 @@ $(document).ready(function() {
  
   $(document).ready(function(){
     
-   $('#add').click(function(){
-    
-    var table = document.getElementById("items-table-body");
-               var roinc = table.rows.length;
-               var bc = document.getElementById("plosu").value;
-               var compstate = document.getElementById("cmpstate").value;
-               
-               roinc++;
-  
-        $('#items-table-body').append(
-  
-            `<tr id='addr0${roinc}'>
-                    <td class="nnum" style="text-align:center;">${roinc} <input type="text"  name='id[]' value= 0 hidden></td></td>
-                    <td style="width: 20%;">
-                      <div class="d-flex">
-                      <select name='product[]' id="product${roinc}" class="form-control product" style="background-color: #43596c; color: white;" onchange="changeprd(this.id)">
-                        <option value=" " selected hidden>Select Product</option>
-                        
-                            {% for i in item %}
-                                {% if i.cid_id == cmp1.cid %}
-                                    <option 
-                                            value="{{ i.name  }}">{{ i.name  }} </option>
-                                {% endif %}
-                            {% endfor %}
-                              </select>
+        $('#add').click(function(){
+            
+            var table = document.getElementById("items-table-body");
+                    var roinc = table.rows.length;
+                    var bc = document.getElementById("plosu").value;
+                    var compstate = document.getElementById("cmpstate").value;
+                    
+                    roinc++;
+        
+            $('#items-table-body').append(
+        
+                    `<tr id='addr0${roinc}'>
+                            <td class="nnum" style="text-align:center;">${roinc} <input type="text"  name='id[]' value= 0 hidden></td></td>
+                            <td style="width: 20%;">
+                            <div class="d-flex">
+                            <select name='product[]' id="product${roinc}" class="form-control product" style="background-color: #43596c; color: white;" onchange="changeprd(this.id)">
+                                <option value=" " selected hidden>Select Product</option>
+                                
+                                    {% for i in item %}
+                                        {% if i.cid_id == cmp1.cid %}
+                                            <option 
+                                                    value="{{ i.name  }}">{{ i.name  }} </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </select>
 
-                            <a href="#">
-                                <button type="button" class="btn btn-outline-secondary ml-1" 
-                                data-target="#newitem" data-toggle="modal">+</button>
-                            </a>
-                        </div>
-                    </td>
-                    <td><input type="text" name='hsn[]' id="hsn${roinc}" placeholder='Enter HSN Code' class="form-control" style="background-color: #43596c; color: white;" /></td>
-                    <td><input type="number" name='qty[]'  placeholder='Enter Qty' id="qty${roinc}" value=0 class="form-control qty" step=0 min=0 style="background-color: #43596c;margin-top: 27px;;  color: white;" onchange="changeqty(this.id)" />
-                      <div><span>Available Qty :</span><span id="qtyspan${roinc}" class=''></span></div>
-                    </td>
-                    <td><input type="number" name='price[]' id="unit${roinc}" placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0" style="background-color: #43596c; color: white;" /></td>
-                    <td>
-                                <input type="text"  id="select_tax" placeholder="Tax Rate" class="form-control seltax d-flex">
-
-                                <select name='tax1[]' id="tax1${roinc}" class="form-control intra_tax d-none">
-                                    <option selected disabled hidden> Select GST</option>
-                                     <option value=28 >28.0% GST(28%)</option>
-                                    <option value=18 >18.0% GST(18%)</option>
-                                    <option value=12  >12.0% GST(12%)</option>
-                                        <option value=5  >05.0% GST(05%)</option>
-                                    <option value=3  >03.0% GST(03%)</option>
-                                        <option value=0  >0.0% GST(0%)</option>
-                                </select>
-                                <select name='tax2[]' id="tax2${roinc}" class="form-control inter_tax d-none">
-                                    <option selected disabled hidden > Select IGST</option>
-                                     <option value=28 >28.0% IGST(28%)</option>
-                                    <option value=18 >18.0% IGST(18%)</option>
-                                    <option value=12  >12.0% IGST(12%)</option>
-                                        <option value=5  >05.0% IGST(05%)</option>
-                                    <option value=3  >03.0% IGST(03%)</option>
-                                        <option value=0  >0.0% IGST(0%)</option>
-                                </select>
-                            </td>  
+                                    <a href="#">
+                                        <button type="button" class="btn btn-outline-secondary ml-1" 
+                                        data-target="#newitem" data-toggle="modal">+</button>
+                                    </a>
+                                </div>
+                            </td>
+                            <td><input type="text" name='hsn[]' id="hsn${roinc}" placeholder='Enter HSN Code' class="form-control" style="background-color: #43596c; color: white;" /></td>
+                            <td><input type="number" name='qty[]'  placeholder='Enter Qty' id="qty${roinc}" value=0 class="form-control qty" step=0 min=0 style="background-color: #43596c;margin-top: 27px;;  color: white;" onchange="changeqty(this.id)" />
+                            <div><span>Available Qty :</span><span id="qtyspan${roinc}" class=''></span></div>
+                            </td>
+                            <td><input type="number" name='price[]' id="unit${roinc}" placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0" style="background-color: #43596c; color: white;" /></td>
                             <td>
-                                <input type="number" name='discount[]' placeholder='Enter Discount' value=0 id="disc${roinc}" class="form-control disc" step=0 min=0>
-                            </td>
-                    <td><input type="number" name='total[]' id="total${roinc}" placeholder=0 class="form-control total" value=0 step="any" readonly style="background-color: #43596c; color: white;" /></td>
-                    <td style="display: none;"><input type="number" step="any" name='taxamount1' id="taxamount${roinc}" class="form-control taxamount" />
-                        <td>
-                                <button type="button" id="${roinc}" class="btn  font-weight-bold clone_row fa fa-clone px-2 py-1 my-1" style="background-color:rgb(88, 107, 143);"></button><br>
-                                <button type="button" id="${roinc}" class="btn btn-danger px-2 mx-1 py-1 remove_row fa fa-close"></button>
-                            </td>
-                  </tr>
-  
-  `
-    
- 
- );
- $('.product').each(function(index, dropdown) {
-                    var row = $(dropdown).closest('.items-table-body'); // Assuming each row has a class 'item-row'
-                    $.ajax({
-                        url: "{% url 'item_dropdown' %}",
-                        type: "GET",
-                        dataType: "json",
-                        data: row.find('select').serialize(),
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                                        <input type="text"  id="select_tax" placeholder="Tax Rate" class="form-control seltax d-flex">
 
-                        success: function(data) {
-                            var dropdown = $('.product');
-                            dropdown.empty();
-                            dropdown.append(`<option selected>Select Item</option>`);
-                            $.each(data, function(key, value) {
-                            
-                                dropdown.append($('<option></option>').attr('value', key).text(value).val(value));
-                            });
+                                        <select name='tax1[]' id="tax1${roinc}" class="form-control intra_tax d-none">
+                                            <option selected disabled hidden> Select GST</option>
+                                            <option value=28 >28.0% GST(28%)</option>
+                                            <option value=18 >18.0% GST(18%)</option>
+                                            <option value=12  >12.0% GST(12%)</option>
+                                                <option value=5  >05.0% GST(05%)</option>
+                                            <option value=3  >03.0% GST(03%)</option>
+                                                <option value=0  >0.0% GST(0%)</option>
+                                        </select>
+                                        <select name='tax2[]' id="tax2${roinc}" class="form-control inter_tax d-none">
+                                            <option selected disabled hidden > Select IGST</option>
+                                            <option value=28 >28.0% IGST(28%)</option>
+                                            <option value=18 >18.0% IGST(18%)</option>
+                                            <option value=12  >12.0% IGST(12%)</option>
+                                                <option value=5  >05.0% IGST(05%)</option>
+                                            <option value=3  >03.0% IGST(03%)</option>
+                                                <option value=0  >0.0% IGST(0%)</option>
+                                        </select>
+                                    </td>  
+                                    <td>
+                                        <input type="number" name='discount[]' placeholder='Enter Discount' value=0 id="disc${roinc}" class="form-control disc" step=0 min=0>
+                                    </td>
+                            <td><input type="number" name='total[]' id="total${roinc}" placeholder=0 class="form-control total" value=0 step="any" readonly style="background-color: #43596c; color: white;" /></td>
+                            <td style="display: none;"><input type="number" step="any" name='taxamount1' id="taxamount${roinc}" class="form-control taxamount" />
+                                <td>
+                                        <button type="button" id="${roinc}" class="btn  font-weight-bold clone_row fa fa-clone px-2 py-1 my-1" style="background-color:rgb(88, 107, 143);"></button><br>
+                                        <button type="button" id="${roinc}" class="btn btn-danger px-2 mx-1 py-1 remove_row fa fa-close"></button>
+                                    </td>
+                        </tr>`);
 
-                        },
-                        error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                        }
-                    });
-                });
-  });
-});
+            
+        });
+    });
 
 $(document).on('change','#plosu',function()   {
                 $(".seltax").removeClass('d-none');

@@ -113,7 +113,7 @@ body{
                     </div>
                 </div>
                 <div class="btn-group col-md-2">
-                    <a href="{% url 'goaddcust' %}" id="myBtn" class="btn btn-outline-info text-grey fas fa-plus" style="width: 40%; margin-top: 8px;" role="button"> Add Customer</a>
+                    <a href="{% url 'goaddcust' %}" id="myBtn" class="btn btn-outline-info text-grey fa fa-plus" style="width: 40%; margin-top: 8px;" role="button"> Add Customer</a>
                 </div>
             </div>
             <div class="container-fluid">
@@ -139,7 +139,7 @@ body{
                                     <td>{{ customer.email }}</td>
                                     <td>{{customer.opening_balance}}</td>
                                     <td>{{customer.status}}</td>
-                                    <td></td>
+                                    <td>{{customer.opening_balance}}</td>
                                     <td style="display: none;">{{ customer.customerid }}</td>
                                 </tr>
                             {% endif %}
@@ -151,7 +151,7 @@ body{
     </div>
 </div>
 <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
-
+<!-- 
 <script>
     item_table_rows = document.getElementById('cust_table_body').querySelectorAll('tr')
     for(let i= 0; i<item_table_rows.length;i++){
@@ -170,7 +170,7 @@ body{
             }
         });
     }
-</script>
+</script> -->
 
 <script>
 

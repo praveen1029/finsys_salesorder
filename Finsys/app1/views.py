@@ -27803,22 +27803,24 @@ def newsalesorder(request):
     acc1  = accounts1.objects.filter(acctype='Sales',cid=cmp1)
     bank = bankings_G.objects.filter(cid=cmp1)
 
-    
-
     ref = salesorder.objects.last()
     if ref:
         ref_no = int(ref.reference_number) + 1
+        ord_no = 1000+ref_no
+
     else:
         ref_no = 1
+        ord_no = 1001
 
+    sale_list = ''
+    sale_ord = salesorder.objects.all()
+    for s in sale_ord:
+        sale_list = s.saleno+ ',' + sale_list
 
     terms  = PaymentTerms.objects.filter(cid=cmp1)
 
-    
-
-
-    context = {'sel1': sel1, 'customers': customers, 'cmp1': cmp1, 'inv': inv, 'bun': bun, 'noninv': noninv,'item':item,
-                'ser': ser, 'tod': tod,'unit':unit,'acc':acc,'acc1':acc1,'ref_no':ref_no,'terms':terms,'bank':bank}
+    context = {'sel1': sel1, 'customers': customers, 'cmp1': cmp1, 'inv': inv, 'bun': bun, 'noninv': noninv,'item':item,'sale_list':sale_list,
+                'ser': ser, 'tod': tod,'unit':unit,'acc':acc,'acc1':acc1,'ref_no':ref_no,'ord_no':ord_no,'terms':terms,'bank':bank}
 
     return render(request,'app1/salesorder.html',context )
 
@@ -27906,7 +27908,7 @@ def createsales_record(request):
         sel2 = salesorder(salename=request.POST.get('customer'), saleemail=request.POST.get('cemail'),
                         saleaddress=request.POST.get('billingaddress'), saledate=request.POST.get('Salesdate'),
                         shipmentdate=request.POST.get('Shipmentdate'), placeofsupply=request.POST.get('placosupply'),
-                        saleno='1000', 
+                        saleno=request.POST.get('ord_no'), 
                        
                         cid=cmp1,
                         reference_number = request.POST.get('Ref_No'),
@@ -27937,8 +27939,6 @@ def createsales_record(request):
 
         if len(request.FILES) != 0:
             sel2.file=request.FILES.get('file')                    
-        sel2.save()
-        sel2.saleno= int(sel2.saleno) + sel2.id
         sel2.save()
 
         product = request.POST.getlist("product[]")
@@ -28125,8 +28125,14 @@ def edit_sales_order(request, id):
     cust1 = customer.objects.get(customerid = edt.salename.split(" ")[0])
     terms = PaymentTerms.objects.filter(cid = cmp1)
     bank = bankings_G.objects.filter(cid=cmp1)
+
+    sale_list = ''
+    sale_ord = salesorder.objects.all()
+    for s in sale_ord:
+        sale_list = s.saleno+ ',' + sale_list
+
     context = {'sale': edt, 'cmp1': cmp1, 'inv': inv,'cust' : cust1,'customers': customers,'bank':bank,"acc_no":acc_no,
-                'noninv': noninv, 'bun': bun, 'ser': ser,'item':item,'itemsale':itemsale,'terms':terms}
+                'noninv': noninv, 'bun': bun, 'ser': ser,'item':item,'itemsale':itemsale,'terms':terms,'sale_list':sale_list}
     return render(request, 'app1/edit_sales_order.html', context)
     
 
@@ -28135,7 +28141,6 @@ def updatesale(request, id):
     if request.method =="POST":
         cmp1 = company.objects.get(id=request.session['uid'])
         upd = salesorder.objects.get(id=id, cid=cmp1)
-
         upd.salename  = request.POST['customer']
         upd.saleemail = request.POST['email']
         upd.saleaddress = request.POST['billingaddress']
@@ -40816,7 +40821,7 @@ def cust_details(request):
             return redirect('/')
         comp = company.objects.get(id=request.session['uid'])
         cust_id = request.POST.get('id').split(" ")[0]
-        cust = customer.objects.get(customerid=cust_id, cid = request.session['uid'])
+        cust = customer.objects.get(customerid=cust_id, cid = comp)
         email = cust.email
         street = cust.street
         city = cust.city
@@ -41278,6 +41283,7 @@ def updatesales(request, id):
         cmp1 = company.objects.get(id=request.session['uid'])
         upd = salesorder.objects.get(id=id, cid=cmp1)
 
+        upd.saleno  = request.POST.get('ord_no')
         upd.salename  = request.POST.get('customer')
         upd.saleemail = request.POST.get('email')
         upd.saleaddress = request.POST.get('billingaddress')

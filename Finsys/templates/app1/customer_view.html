@@ -421,7 +421,6 @@
 
         <div class="card card-registration card-registration-2" style="border-radius: 15px;"  >
             <div class="card-body p-0" >
-               
                 <div id="details">
                     <div class="row g-0" >
                         <div class="col-lg-8">
@@ -658,18 +657,18 @@
                 <div id="statment" style="display: none;">
                     <div class="container-fluid" >
                         <div class="py-5" >
-                              <div class="row hidden-md-up" style="margin-top: 15px;" >
+                            <div class="row hidden-md-up" style="margin-top: 15px;" >
                                 <div class="col-md-9" style="margin: auto;"  size="A4">
-                                  <div class="card" id="printdiv">
-                                    <div id="whatToPrint">
-                                    <div class="card-block">
-                                      <div class="card-body">
-                                        <div class="container bootdey"  >
-                                            <div class="row">
-                                                <div class="col-sm-12 col-sm-offset-1" style="padding:20px;"  >
-                                                    <div class="widget-box">
-                                                        <div class="widget-body">
-                                                            <div class="widget-main padding-24">
+                                    <div class="card" id="printdiv">
+                                        <div id="whatToPrint">
+                                            <div class="card-block">
+                                                <div class="card-body">
+                                                    <div class="container bootdey"  >
+                                                        <div class="row">
+                                                            <div class="col-sm-12 col-sm-offset-1" style="padding:20px;"  >
+                                                                <div class="widget-box">
+                                                                    <div class="widget-body">
+                                                                        <div class="widget-main padding-24">
                                                                 <div class="row"  style="padding:20px;" >
                                                                     <div class="col-sm-12" style="background-image: linear-gradient(#1b83e8, black); color: white;">
                                                                         <p style="font-size: 4vh; text-align: center;">Statement of Accounts</p>
@@ -782,111 +781,111 @@
                                                                     <br>
                                                                     <br>
                                                                 </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        </div>    
                                                     </div>
                                                 </div>
-                                            </div>    
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>  
                     </div>
                 </div>
-            </div>  
-        </div>
-    </div>
-
-            <div id="transation" style="display: none;" >
-                <div class="row" >
-                    <div class="p-5" style="margin-left: 2vh;">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h1 class="fw-bold mb-0 text-black">{{ customer.title }}. {{ customer.firstname }} {{ customer.lastname }}</h1>
+                <div id="transation" style="display: none;" >
+                    <div class="row" >
+                        <div class="p-5" style="margin-left: 2vh;">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h1 class="fw-bold mb-0 text-black">{{ customer.title }}. {{ customer.firstname }} {{ customer.lastname }}</h1>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row" style="margin-top: -8vh; justify-content: space-between;">
-                    <div style="text-align: left; margin-left: 8vh;">
-                        <div class=" d-flex">
-                            <h6 class="mb-0">Phone&nbsp;&nbsp;:&nbsp;&nbsp;</h6>
-                            <p class="mb-0" style="text-align: right;">{{customer.mobile}}</p>
-                        </div> <br>
+                    <div class="row" style="margin-top: -8vh; justify-content: space-between;">
+                        <div style="text-align: left; margin-left: 8vh;">
+                            <div class=" d-flex">
+                                <h6 class="mb-0">Phone&nbsp;&nbsp;:&nbsp;&nbsp;</h6>
+                                <p class="mb-0" style="text-align: right;">{{customer.mobile}}</p>
+                            </div> <br>
 
-                        <div class=" d-flex">
-                            <h6 class="mb-0">Email&nbsp;&nbsp;:&nbsp;&nbsp;</h6>
-                            <p class="mb-0" style="text-align: right;">{{customer.email}}</p>
-                        </div><br>
+                            <div class=" d-flex">
+                                <h6 class="mb-0">Email&nbsp;&nbsp;:&nbsp;&nbsp;</h6>
+                                <p class="mb-0" style="text-align: right;">{{customer.email}}</p>
+                            </div><br>
 
-                        <div class=" d-flex">
-                            <h6 class="mb-0">Credit Limit&nbsp;&nbsp;:&nbsp;&nbsp;</h6>
-                            <p class="mb-0" style="text-align: right;">{{customer.credit_limit}}</p>
+                            <div class=" d-flex">
+                                <h6 class="mb-0">Credit Limit&nbsp;&nbsp;:&nbsp;&nbsp;</h6>
+                                <p class="mb-0" style="text-align: right;">{{customer.credit_limit}}</p>
+                            </div>
+                        </div>
+                        <div  style="text-align: right;">
+                            <h6 class="mb-0 mr-5" >Address&nbsp;&nbsp;: &nbsp;&nbsp;{{customer.street}},<br>{{customer.city}},{{customer.state}},{{customer.pincode}}</h6><br>
+                            <h6 class="mb-0 " style="margin-right: 9vh;">GSTIN&nbsp;&nbsp;:&nbsp;&nbsp;{{customer.gstin}}</h6>
                         </div>
                     </div>
-                    <div  style="text-align: right;">
-                        <h6 class="mb-0 mr-5" >Address&nbsp;&nbsp;: &nbsp;&nbsp;{{customer.street}},<br>{{customer.city}},{{customer.state}},{{customer.pincode}}</h6><br>
-                        <h6 class="mb-0 " style="margin-right: 9vh;">GSTIN&nbsp;&nbsp;:&nbsp;&nbsp;{{customer.gstin}}</h6>
-                    </div>
-                </div>
 
-                <div class="container-fluid">
-                    <div class="row ">
-                        <table class="table table-responsive-md mt-5 mr-5 ml-5 table-hover text-center" id="transactiontable">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>DATE</th>
-                                    <th>TYPE</th>
-                                    <th>BILL NUMBER</th>
-                                    <th>TOTAL</th>
-                                    <th>BALANCE</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for invoices in invs %}
-                                <tr>
-                                    <td></td>
-                                    <td>{{ invoices.invoicedate | date:'d-m-Y' }}</td>
-                                    <td>Invoice</td>
-                                    <td>{{ invoices.invoiceno }}</td>
-                                    <td>{{ invoices.grandtotal }}</td>
-                                    <td>{{ invoices.baldue }}</td>
-                                </tr>
-                                {% endfor %}
-    
-                                {% for i in payme %}
-                                <tr>
-                                    <td></td>
-                                    <td>{{ i.paymdate  | date:'d-m-Y' }}</td>
-                                    <td>Customer Payment</td>
-                                    <td>{{ i.refno }}</td>
-                                    <td>{{ i.amtcredit }}</td>
-                                    <td>{{ i.balance }}</td>
-                                </tr>
-                                {% endfor %}
-    
-                                {% for estimate in est1 %}
-                                <tr>
-                                    <td></td>
-                                    <td>{{ estimate.estimatedate | date:'d-m-Y' }}</td>
-                                    <td>Estimate</td>
-                                    <td>{{ estimate.estimateno }}</td>
-                                    <td>{{ i.amtcredit }}</td>
-                                    <td>{{ estimate.estimatetotal }}</td>
-                                </tr>
-                                {% endfor %}
-                                {% for sale in sel1 %}
-                                <tr>
-                                    <td></td>
-                                    <td>{{ sale.saledate | date:'d-m-Y' }}</td>
-                                    <td>Sales Order</td>
-                                    <td>{{ sale.saleno }}</td>
-                                    <td>{{ sale.salestotal }}</td>
-                                    <td>{{ sale.balance }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                    <div class="container-fluid">
+                        <div class="row ">
+                            <table class="table table-responsive-md mt-5 mr-5 ml-5 table-hover text-center" id="transactiontable">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>DATE</th>
+                                        <th>TYPE</th>
+                                        <th>BILL NUMBER</th>
+                                        <th>TOTAL</th>
+                                        <th>BALANCE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for invoices in invs %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ invoices.invoicedate | date:'d-m-Y' }}</td>
+                                        <td>Invoice</td>
+                                        <td>{{ invoices.invoiceno }}</td>
+                                        <td>{{ invoices.grandtotal }}</td>
+                                        <td>{{ invoices.baldue }}</td>
+                                    </tr>
+                                    {% endfor %}
+        
+                                    {% for i in payme %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ i.paymdate  | date:'d-m-Y' }}</td>
+                                        <td>Customer Payment</td>
+                                        <td>{{ i.refno }}</td>
+                                        <td>{{ i.amtcredit }}</td>
+                                        <td>{{ i.balance }}</td>
+                                    </tr>
+                                    {% endfor %}
+        
+                                    {% for estimate in est1 %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ estimate.estimatedate | date:'d-m-Y' }}</td>
+                                        <td>Estimate</td>
+                                        <td>{{ estimate.estimateno }}</td>
+                                        <td>{{ i.amtcredit }}</td>
+                                        <td>{{ estimate.estimatetotal }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% for sale in sel1 %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ sale.saledate | date:'d-m-Y' }}</td>
+                                        <td>Sales Order</td>
+                                        <td>{{ sale.saleno }}</td>
+                                        <td>{{ sale.salestotal }}</td>
+                                        <td>{{ sale.balance }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

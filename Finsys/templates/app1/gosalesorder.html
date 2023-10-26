@@ -150,31 +150,55 @@
                             <tbody>
                                 {% for sale in sel1 %}
                                     {% if sale.cid_id == cmp1.cid %}
-                                        <tr  class="table-row clickable-row text-center" data-href="sales_order_view/{{ sale.id }}" >
-                                            <td style="text-align: center;">{{ sale.saledate | date:'d-m-Y' }}</td>
-                                            <td style="text-align: center;">{{ sale.saleno }}</td>
-                                            <td style="text-align: center;">{{ sale.cust }}</td>
-                                            <td style="text-align: center;">{{ sale.saleemail }}</td>
-                                            <td style="text-align: center;">{{ sale.salestotal }}</td>
-                                            <td style="text-align: center;">{{ sale.status }}</td>
-                                            <td style="text-align: center;">{{ sale.balance }}</td>
+                                        <tr  class="table-row  text-center"  >
+                                            <td class="clickable-row" style="text-align: center;" data-href="sales_order_view/{{ sale.id }}">{{ sale.saledate | date:'d-m-Y' }}</td>
+                                            <td class="clickable-row" style="text-align: center;" data-href="sales_order_view/{{ sale.id }}">{{ sale.saleno }}</td>
+                                            <td class="clickable-row" style="text-align: center;" data-href="sales_order_view/{{ sale.id }}">{{ sale.cust }}</td>
+                                            <td class="clickable-row" style="text-align: center;" data-href="sales_order_view/{{ sale.id }}">{{ sale.saleemail }}</td>
+                                            <td class="clickable-row" style="text-align: center;" data-href="sales_order_view/{{ sale.id }}">{{ sale.salestotal }}</td>
+                                            <td class="clickable-row" style="text-align: center;" data-href="sales_order_view/{{ sale.id }}">{{ sale.status }}</td>
+                                            <td class="clickable-row" style="text-align: center;" data-href="sales_order_view/{{ sale.id }}">{{ sale.balance }}</td>
                                             {% if sale.inv_status == 0 %}
                                                 {% if sale.salcrd_status == 0 %}
                                                 <td style="text-align: center;">
-                                                    <a class="btn btn-outline-danger text-white" href="{% url 'convert_to_inv' sale.id %}"  >Convert to Invoice</a><br>
-                                                    <a class="btn btn-outline-danger text-white" href="{% url 'convert_to_reccinv' sale.id %}">Convert to Recurring Invoice</a>
+                                                    <div class="dropdown">
+                                                        <a type="button" class="btn btn-outline-info  rounded-pill text-grey dropdown-toggle"
+                                                                data-toggle="dropdown"> Convert To
+                                                        </a>
+                                                        <div class="dropdown-menu " style="background-color: black;">
+                                                            <a class="dropdown-item" href="{% url 'convert_to_inv' sale.id %}"
+                                                                style="height: 40px; font-size: 15px; color: white; text-align: center;" >Invoice</a>
+        
+                                                        <a class="dropdown-item " href="{% url 'convert_to_reccinv' sale.id %}"
+                                                            style="height: 40px; font-size: 15px; color: white; text-align: center; " >Recurring Invoice </a>                    
+                                                        </div> 
+                                                    </div>
                                                 </td>
                                                 {% else %}
                                                 <td style="text-align: center;">
-                                                    <a class="btn btn-outline-danger text-white" href="{% url 'convert_to_inv' sale.id %}" >Convert to Invoice</a><br>
-                                                    <span class="text-success">Converted to Recurring Invoice</span>
+                                                    <div class="dropdown">
+                                                        <a type="button" class="btn btn-outline-info rounded-pill  text-grey dropdown-toggle"
+                                                                data-toggle="dropdown"> Convert To
+                                                        </a>
+                                                        <div class="dropdown-menu " style="background-color: black;">
+                                                            <a class="dropdown-item" href="{% url 'convert_to_inv' sale.id %}"
+                                                                style="height: 40px; font-size: 15px; color: white; text-align: center;" >Invoice</a>                 
+                                                        </div> 
+                                                    </div>
                                                 </td>
                                                 {% endif %}
                                             {% else %}
                                                 {% if sale.salcrd_status == 0 %}
                                                 <td style="text-align: center;">
-                                                    <span class="text-success">Converted to Invoice</span><br>
-                                                    <a class="btn btn-outline-danger text-white" href="{% url 'convert_to_reccinv' sale.id %}">Convert to Recurring Invoice</a>
+                                                    <div class="dropdown">
+                                                        <a type="button" class="btn btn-outline-info rounded-pill  text-grey dropdown-toggle"
+                                                                data-toggle="dropdown"> Convert To
+                                                        </a>
+                                                        <div class="dropdown-menu " style="background-color: black;">
+                                                        <a class="dropdown-item " href="{% url 'convert_to_reccinv' sale.id %}"
+                                                            style="height: 40px; font-size: 15px; color: white; text-align: center; " >Recurring Invoice </a>                    
+                                                        </div> 
+                                                    </div>
                                                 </td>
                                                 {% else %}
                                                 <td style="text-align: center;">
