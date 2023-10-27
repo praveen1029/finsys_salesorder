@@ -35,9 +35,9 @@
                 <div class="row mt-3">
                     <div class="col-md-4">
                         <div class="d-flex">
-                            <label class="col-form-label">Sales Order No.</label><span class="text-danger mt-1 ml-3" id="dangerdiv" style="display: none;"><span class="text-white"> (</span>Changing this value is not Recommended <span class="text-white">)</span></span>
+                            <label class="col-form-label">Sales Order No.</label><span class="text-danger mt-1 ml-3" id="dangerdiv" style="display: none;"><span class="text-white"> (</span>This Id Should be Continous <span class="text-white">)</span></span>
                         </div>
-                        <input type="number" class="form-control" name="ord_no" value="{{ord_no}}"  id="ord_no" style="background-color: #43596c;"><br>
+                        <input type="text" class="form-control" name="ord_no"  id="ord_no" style="background-color: #43596c;"><br>
                         
 
                         <label class="col-form-label mt-2">Customer</label>
@@ -177,6 +177,7 @@
                         <input type="text" class="form-control" name="bnk_id" id="bnk_id" style="background-color: #43596c;" readonly>
                     </div>
                 </div>
+
                 <div class="row clearfix">
                     <div class="col-md-12 table-responsive-md mt-3">
                     <table class="table table-bordered table-hover mt-3" id="tab_logic">
@@ -945,7 +946,7 @@
                                                                  placeholder="Enter a valid HSN code" required>
                                                             </div>
                                                         </div>
-                                                        <div class="row">
+                                                    <div class="row">
                                                         <div class="col-md-3 mt-3">
                                                             <label for="validationCustom05" name style="color: white;">Tax Reference</label>
                                                         </div>
@@ -962,6 +963,40 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                        <div class="row" id="taxdiv" style="display: none;">
+                                                            <div class="d-flex">
+                                                                <div class="col-md-6 mt-3">
+                                                                    <label for="validationCustom01"
+                                                                        style="color: white;">Intra State Tax Rate</label>
+                                                                    <select name="intra_st" class="form-control" 
+                                                                        style="background-color: #2a4964; color: white;"
+                                                                        id="intra_st" >
+                                                                        <option value=" " hidden>Choose...</option>
+                                                                        <option value=0>GST 0 (0%)</option>
+                                                                        <option value=5>GST 5 (5%)</option>
+                                                                        <option value=12>GST 12 (12%)</option>
+                                                                        <option value=18>GST 18 (18%)</option>
+                                                                        <option value=28>GST 28 (28%)</option>
+                                                                        <option value=0>Out of Scope(0%)</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-md-6 mt-3">
+                                                                    <label for="inter_st"
+                                                                        style="color: white;">Inter State Tax Rate</label>
+                                                                    <select name="inter_st" class="form-control" 
+                                                                            style="background-color: #2a4964; color: white;"
+                                                                            id="inter_st" >
+                                                                            <option value=" " hidden>Choose...</option>
+                                                                            <option value=0>IGST 0 (0%)</option>
+                                                                        <option value=5>IGST 5 (5%)</option>
+                                                                        <option value=12>IGST 12 (12%)</option>
+                                                                        <option value=18>IGST 18 (18%)</option>
+                                                                        <option value=28>IGST 28 (28%)</option>
+                                                                        <option value=0>Out of Scope(0%)</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -1035,38 +1070,7 @@
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col-md-12 mx-0">
-                                                                    <div class="row">
-                                                                        <div class="col-md-6 mt-3">
-                                                                            <label for="validationCustom01"
-                                                                                style="color: white;">Intra State Tax Rate</label>
-                                                                            <select name="intra_st" class="form-control" 
-                                                                                style="background-color: #2a4964; color: white;"
-                                                                                id="intra_st" >
-                                                                                <option hidden>Choose...</option>
-                                                                                <option value=0>GST 0 (0%)</option>
-                                                                                <option value=5>GST 5 (5%)</option>
-                                                                                <option value=12>GST 12 (12%)</option>
-                                                                                <option value=18>GST 18 (18%)</option>
-                                                                                <option value=28>GST 28 (28%)</option>
-                                                                                <option value=0>Out of Scope(0%)</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="col-md-6 mt-3">
-                                                                            <label for="inter_st"
-                                                                                style="color: white;">Inter State Tax Rate</label>
-                                                                            <select name="inter_st" class="form-control" 
-                                                                                    style="background-color: #2a4964; color: white;"
-                                                                                    id="inter_st" >
-                                                                                    <option hidden>Choose...</option>
-                                                                                    <option value=0>IGST 0 (0%)</option>
-                                                                                <option value=5>IGST 5 (5%)</option>
-                                                                                <option value=12>IGST 12 (12%)</option>
-                                                                                <option value=18>IGST 18 (18%)</option>
-                                                                                <option value=28>IGST 28 (28%)</option>
-                                                                                <option value=0>Out of Scope(0%)</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div><br>
+                                                                    <br>
                                                                     <div class="row" >
                                                                         <div class="col-md-3">
                                                                             <div class="form-check">
@@ -1216,8 +1220,8 @@
         for(let i=0; i<salelist.length; i++){
             if (ord_value == salelist[i]){
                 alert('Sale Order Number already in use.')
-                $('#ord_no').val(ord)
                 document.getElementById('dangerdiv').style.display = 'none';
+                document.getElementById('ord_no').value = ''
             }
         }
     })
@@ -1470,6 +1474,12 @@ function reloadterms(){
           while (select.options.length > 0) {
           select.remove(0);
           }
+
+          var dropdow = $('#pay_term');
+          dropdow.append($('<option value="" selected hidden>Select Payment Term</option>'));
+          dropdow.append($('<option value="0">Due On Receipt</option>'));
+          dropdow.append($('<option value="30">NET 30</option>'));
+          dropdow.append($('<option value="60">NET 60</option>'));
           
           for(let i=0; i<term_data.length;i++){
                       // Create a new option element
@@ -1480,9 +1490,8 @@ function reloadterms(){
           // Append the new option to the select field
           select.appendChild(newOption);
           }
-          var dropdow = $('#pay_term');
+          
      
-        dropdow.append($('<option value="" selected hidden>Select Payment Term</option>'));
     },
     error: function(xhr, status, error) {
     console.error(xhr.responseText);
@@ -1585,32 +1594,6 @@ $(document).ready(function() {
             });
         });
 
-  $(document).ready(function() {
-
-
-    var bc = document.getElementById("plosu").value;
-    var compstate = document.getElementById("cmpstate").value;
-    if (bc == compstate ) {
-        document.getElementById('cgst1').style.display = 'flex';
-        document.getElementById('sgst1').style.display = 'flex';
-        document.getElementById('igst1').style.display = 'none'; 
-
-    } else {
-        document.getElementById('cgst1').style.display = 'none';
-        document.getElementById('sgst1').style.display = 'none';
-        document.getElementById('igst1').style.display = 'flex';
-
-    }
-    // var i = 1;
-    // $("#add_row").click(function() {
-    //   b = i - 1;
-    //   $('#addr' + i).html($('#addr' + b).html()).find('td:first-child').html(i + 1);
-    //   $('#tab_logic').append('<tr id="addr' + (i + 1) + '"></tr>');
-    //   i++;
-    // });
-    
-    });
-
 $(document).ready(function(){
       
   $('#add').click(function(){
@@ -1691,8 +1674,6 @@ $(document).ready(function(){
     $(document).on('change', '.product',function(){ 
                 
                 var n = $(this).attr("id").slice(7);
-                console.log('item changed')
-                console.log(n)
                 $.ajax({
                 url: "{% url 'itemdata' %}",
                 type : 'GET',
@@ -1707,8 +1688,6 @@ $(document).ready(function(){
                     data3 = response.price
                     data4 = response.gst
                     data5 = response.sgst
-
-                    console.log(data)
                     
                     document.getElementById('hsn'+n).value = data;
                     document.getElementById('qtyspan'+n).innerHTML = data2;
@@ -1720,45 +1699,45 @@ $(document).ready(function(){
 
             });
 
-            $(document).on('click','.remove_row',function(){
-                var row_id = $(this).attr("id");
-                $('#addr0'+row_id+'').remove();
-                
-                calc();
-            });
+    $(document).on('click','.remove_row',function(){
+        var row_id = $(this).attr("id");
+        $('#addr0'+row_id+'').remove();
         
+        calc();
+    });
 
-            $(document).on('click','.clone_row',function(){
-                var roinc = $("#items-table-body tr").length;
-                var originalRow = $(this).closest('#items-table-body tr'); 
-                var clonedRow = originalRow.clone();
 
-                clonedRow.attr('id', 'addr0' +(roinc+1));
+    $(document).on('click','.clone_row',function(){
+        var roinc = $("#items-table-body tr").length;
+        var originalRow = $(this).closest('#items-table-body tr'); 
+        var clonedRow = originalRow.clone();
 
-                clonedRow.find('.nnum').text(roinc+1);
+        clonedRow.attr('id', 'addr0' +(roinc+1));
 
-                clonedRow.find('[id]').each(function() {
-                    var oldId = $(this).attr('id');
-                    var newId = oldId.replace(/\d+/, roinc+1);
-                    console.log(newId)
-                    $(this).attr('id', newId );
-                });
+        clonedRow.find('.nnum').text(roinc+1);
 
-                clonedRow.find('.product').each(function() {
-                    $(this).val(originalRow.find('.product').val());
-                });
-                clonedRow.find('.intra_tax').each(function() {
-                    $(this).val(originalRow.find('.intra_tax').val());
-                });
-                clonedRow.find('.inter_tax').each(function() {
-                    $(this).val(originalRow.find('.inter_tax').val());
-                });
-                originalRow.after(clonedRow);
-                
-                calc();
-                
-            });
-            $(document).ready(function(){
+        clonedRow.find('[id]').each(function() {
+            var oldId = $(this).attr('id');
+            var newId = oldId.replace(/\d+/, roinc+1);
+            console.log(newId)
+            $(this).attr('id', newId );
+        });
+
+        clonedRow.find('.product').each(function() {
+            $(this).val(originalRow.find('.product').val());
+        });
+        clonedRow.find('.intra_tax').each(function() {
+            $(this).val(originalRow.find('.intra_tax').val());
+        });
+        clonedRow.find('.inter_tax').each(function() {
+            $(this).val(originalRow.find('.inter_tax').val());
+        });
+        originalRow.after(clonedRow);
+        
+        calc();
+        
+    });
+    $(document).ready(function(){
 
             
             $('#items-table-body').on('keyup change', function () {
@@ -1911,6 +1890,30 @@ $(document).ready(function(){
 
         // item modal
 
+
+        var checkbox1 = document.getElementById('inclusive');
+        checkbox1.addEventListener('click', function () {
+            if (checkbox1.checked) {
+                document.getElementById('taxdiv').style.display = 'block';
+                document.getElementById('check').checked = false;
+            } else {
+                document.getElementById('taxdiv').style.display = 'none';
+                document.getElementById('intra_st').value = ' ';
+                document.getElementById('inter_st').value = ' ';
+            }
+        });
+
+        var checkbox = document.getElementById('check');
+        checkbox.addEventListener('click', function () {
+            if (checkbox.checked) {
+                document.getElementById('taxdiv').style.display = 'none';
+                document.getElementById('inclusive').checked = false;
+                document.getElementById('intra_st').value = ' ';
+                document.getElementById('inter_st').value = ' ';
+            } 
+
+        });
+
         $(document).on("click","#itemSave",function(){
             var taxref,status1;
  
@@ -2021,6 +2024,18 @@ $(document).ready(function(){
                             }else{
                                 document.getElementById('gstnodiv').style.display = 'none';
                                 document.getElementById('gstno').value = '';
+                            }
+                            var compstate = document.getElementById("cmpstate").value;
+                            if (data.shipstate == compstate ) {
+                                document.getElementById('cgst1').style.display = 'flex';
+                                document.getElementById('sgst1').style.display = 'flex';
+                                document.getElementById('igst1').style.display = 'none'; 
+
+                            } else {
+                                document.getElementById('cgst1').style.display = 'none';
+                                document.getElementById('sgst1').style.display = 'none';
+                                document.getElementById('igst1').style.display = 'flex';
+
                             }
                         }
                     });
@@ -2481,6 +2496,7 @@ $(document).ready(function(){
 //                 }
 //               }
 </script>
+
 
 <script>
     $(document).on('change', '#openbalance',function () {

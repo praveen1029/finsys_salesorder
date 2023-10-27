@@ -362,7 +362,7 @@
                                     {% if customer.status == act%}
                                     <a href="{% url 'inactive_cust' customer.customerid %}" class=" fa fa-exchange btn btn-outline-info rounded-pill text-grey " role="button" >&nbsp;Activate</a> 
                                     {% else %}
-                                    <a href="{% url 'active_cust' customer.customerid %}" class=" fa fa-exchange btn btn-outline-info rounded-pill text-grey " role="button" >&nbsp;Inactivate</a> 
+                                    <a href="{% url 'active_cust' customer.customerid %}" class=" fa fa-exchange btn btn-outline-info rounded-pill text-grey " role="button" >&nbsp;Deactivate</a> 
                                     {% endif %}
                                 </div>
 
@@ -422,7 +422,7 @@
         <div class="card card-registration card-registration-2" style="border-radius: 15px;"  >
             <div class="card-body p-0" >
                 <div id="details">
-                    <div class="row g-0" >
+                    <div class="row g-0" style="margin-left: 1px; margin-right: 1px;">
                         <div class="col-lg-8">
                             <div class="p-5">
                                 <div class="d-flex justify-content-between align-items-center mb-5">
@@ -614,42 +614,39 @@
                         </div>
                         <div class="col-md-4" style="background-color: rgba(22,37,50,255); border-top-right-radius:2vh; border-bottom-right-radius: 2vh;">
                             <div class="p-5">
-                                <h3 class="fw-bold mb-5 mt-2 pt-1">GST</h3>
-                                <hr class="my-4">
+                                <h3 class="fw-bold mb-3 mt-2 pt-1">GST</h3>
+                                <hr class="my-4" style="background-color: #fff;">
                                 <div class="d-flex justify-content-between mb-4">
-                                    <h5 class="">GSTIN</h5>
-                                    <h6>{{ customer.gstin }}</h6>
+                                    <h5 class="">Customer Status</h5>
+                                    <h6>{{ customer.status }}</h6>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <h5 class="mb-3">GST Type</h5>
-                                    </div>
-                                    <div class="col-md-2">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h6 style="text-align:right;">{{customer.gsttype }}</h6> 
-                                    </div>
+                                {% if customer.gstin %}
+                                <div class="d-flex justify-content-between mb-4">
+                                    <h5 class="">GST Number</h5>
+                                    <h6 >{{ customer.gstin }}</h6>
+                                </div>
+                                {% endif %}
+                                <div class="d-flex justify-content-between mb-4">
+                                    <h5 class="">GST Type</h5>
+                                    <h6 style="text-align: right;">{{customer.gsttype }}</h6>
                                 </div>
                                 <div class="d-flex justify-content-between mb-4">
                                     <h5 class="">PAN Number</h5>
                                     <h6>{{ customer.panno }}</h6>
                                 </div>
-
                                 <div class="d-flex justify-content-between mb-4">
                                     <h5 class="">Opening Balance</h5>
                                     <h6>{{ customer.opening_balance }}</h6>
                                 </div>
-
                                 <div class="d-flex justify-content-between mb-4">
                                     <h5 class="">Credit Limit</h5>
                                     <h6>{{ customer.credit_limit }}</h6>
                                 </div>
-
                                 <div class="d-flex justify-content-between mb-4">
-                                    <h5 class="">Status </h5>
-                                    <h6>{{ customer.status }}</h6>
+                                    <h5 class="">Balance</h5>
+                                    <h6>{{ customer.opening_balance }}</h6>
                                 </div>
-                                <hr class="my-4">
+                                <hr class="my-4" style="background-color: #fff;">
                             </div>
                         </div>
                     </div>
@@ -669,118 +666,118 @@
                                                                 <div class="widget-box">
                                                                     <div class="widget-body">
                                                                         <div class="widget-main padding-24">
-                                                                <div class="row"  style="padding:20px;" >
-                                                                    <div class="col-sm-12" style="background-image: linear-gradient(#1b83e8, black); color: white;">
-                                                                        <p style="font-size: 4vh; text-align: center;">Statement of Accounts</p>
-                                                                        <p style=" text-align: center;"> {{cmp1.cname}} <br>
-                                                                            {{cmp1.caddress}} <br>
-                                                                            {{cmp1.city}},
-                                                                            {{cmp1.state}}<br>
-                                                                            {{cmp1.cemail}}
-                                                                            <br></p>
-                                                                        <!-- <div class="col-6">
-                                                                            <div style="width:30px;">
-                                                                                <img src="/media/images/default.png">
+                                                                            <div class="row"  style="padding:20px;" >
+                                                                                <div class="col-sm-12" style="background-image: linear-gradient(#1b83e8, black); color: white;">
+                                                                                    <p style="font-size: 4vh; text-align: center;">Statement of Accounts</p>
+                                                                                    <p style=" text-align: center;"> {{cmp1.cname}} <br>
+                                                                                        {{cmp1.caddress}} <br>
+                                                                                        {{cmp1.city}},
+                                                                                        {{cmp1.state}}<br>
+                                                                                        {{cmp1.cemail}}
+                                                                                        <br></p>
+                                                                                    <!-- <div class="col-6">
+                                                                                        <div style="width:30px;">
+                                                                                            <img src="/media/images/default.png">
+                                                                                            </div>
+                                                                        
+                                                                                    </div><br> -->
+                                                                                </div><!-- /.col -->
+                                                                            </div><!-- /.row -->
+                                                                            <br>
+                                                                            <div class="row col-12">
+                                                                                <div class="col-6">
+                                                                                    <p style="color:black; font-weight: bold;">Customer Details : </p>
+                                                                                    <p style="color:black;">{{customer.firstname}} {{customer.lastname}}<br>
+                                                                                        {{customer.street}},{{customer.city}}<br>
+                                                                                        {{customer.state}},{{customer.country}}<br>
+                                                                                        {{customer.pincode }}<br>
+                                                                                        {{customer.email}}<br>
+                                                                                        {{customer.phone}}<br>
+                                                                                    </p>
                                                                                 </div>
-                                                            
-                                                                        </div><br> -->
-                                                                    </div><!-- /.col -->
-                                                                </div><!-- /.row -->
-                                                                <br>
-                                                                <div class="row col-12">
-                                                                    <div class="col-6">
-                                                                        <p style="color:black; font-weight: bold;">Customer Details : </p>
-                                                                        <p style="color:black;">{{customer.firstname}} {{customer.lastname}}<br>
-                                                                            {{customer.street}},{{customer.city}}<br>
-                                                                            {{customer.state}},{{customer.country}}<br>
-                                                                            {{customer.pincode }}<br>
-                                                                            {{customer.email}}<br>
-                                                                            {{customer.phone}}<br>
-                                                                        </p>
-                                                                    </div>
-                                                                    <div class="col-md-2"></div><br>
-                                                                    <div class="col-4 ">
-                                                                        <div class="d-flex justify-content-between" style="color: black;">
-                                                                            <p class="" style="font-weight: bold;">Opening balance</p>
-                                                                            <p>:</p>
-                                                                            <p>{{ bal_amount }}</p>
-                                                                        </div>
-                                                                        <div class="d-flex justify-content-between " style="color: black;">
-                                                                            <p class="" style="font-weight: bold;">Invoiced Amount</p>
-                                                                            <p>:</p>
-                                                                            <p>{{ invoiced }}</p>
-                                                                        </div>
-                                                                        <div class="d-flex justify-content-between " style="color: black;">
-                                                                            <p class="" style="font-weight: bold;">Amount Received</p>
-                                                                            <p>:</p>
-                                                                            <p>{{ re }}</p>
-                                                                        </div>
-                                                                        <div class="d-flex justify-content-between " style="color: black;">
-                                                                            <p class="" style="font-weight: bold;">Balance Due</p>
-                                                                            <p>:</p>
-                                                                            <p>{{ baldue }}</p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div><br>
-                                                                <div class="col-md-12">
-                                                                    <table border="0" id="logic" class=" table-striped" width="100%" style="color:black;">
-                                                                        <thead class="thead-dark">
-                                                                            <tr class="bg-dark text-white" style="text-align: center;">
-                                                                                <th>Date</th>
-                                                                                <th>Transactions</th>
-                                                                                <th>Bill Number</th>
-                                                                                <th>Total</th>
-                                                                                <th>Balance</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody style="text-align: center;">
-                                                                            {% for invoices in invs %}
-                                                                                <tr>
-                                                                                    <td>{{ invoices.invoicedate | date:'d-m-Y' }}</td>
-                                                                                    <td>Invoice</td>
-                                                                                    <td>{{ invoices.invoiceno }}</td>
-                                                                                    <td>{{ invoices.grandtotal }}</td>
-                                                                                    <td>{{ invoices.baldue }}</td>
-                                                                                </tr>
-                                                                            {% endfor %}
-                                            
-                                                                            {% for i in payme %}
-                                                                                <tr>
-                                                                                    <td>{{ i.paymdate  | date:'d-m-Y' }}</td>
-                                                                                    <td>Customer Payment</td>
-                                                                                    <td>{{ i.refno }}</td>
-                                                                                    <td>{{ i.amtcredit }}</td>
-                                                                                    <td>{{ i.balance }}</td>
-                                                                                </tr>
-                                                                            {% endfor %}
-                                            
-                                                                            {% for estimate in est1 %}
-                                                                                <tr>
-                                                                                    <td>{{ estimate.estimatedate | date:'d-m-Y' }}</td>
-                                                                                    <td>Estimate</td>
-                                                                                    <td>{{ estimate.estimateno }}</td>
-                                                                                    <td>{{ i.amtcredit }}</td>
-                                                                                    <td>{{ estimate.estimatetotal }}</td>
-                                                                                </tr>
-                                                                            {% endfor %}
-                                                                            {% for sale in sel1 %}
-                                                                                <tr>
-                                                                                    <td>{{ sale.saledate | date:'d-m-Y' }}</td>
-                                                                                    <td>Sales Order</td>
-                                                                                    <td>{{ sale.saleno }}</td>
-                                                                                    <td>{{ sale.salestotal }}</td>
-                                                                                    <td>{{ sale.balance }}</td>
-                                                                                </tr>
-                                                                            {% endfor %}
+                                                                                <div class="col-md-2"></div><br>
+                                                                                <div class="col-4 ">
+                                                                                    <div class="d-flex justify-content-between" style="color: black;">
+                                                                                        <p class="" style="font-weight: bold;">Opening balance</p>
+                                                                                        <p>:</p>
+                                                                                        <p>{{ bal_amount }}</p>
+                                                                                    </div>
+                                                                                    <div class="d-flex justify-content-between " style="color: black;">
+                                                                                        <p class="" style="font-weight: bold;">Invoiced Amount</p>
+                                                                                        <p>:</p>
+                                                                                        <p>{{ invoiced }}</p>
+                                                                                    </div>
+                                                                                    <div class="d-flex justify-content-between " style="color: black;">
+                                                                                        <p class="" style="font-weight: bold;">Amount Received</p>
+                                                                                        <p>:</p>
+                                                                                        <p>{{ re }}</p>
+                                                                                    </div>
+                                                                                    <div class="d-flex justify-content-between " style="color: black;">
+                                                                                        <p class="" style="font-weight: bold;">Balance Due</p>
+                                                                                        <p>:</p>
+                                                                                        <p>{{ baldue }}</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div><br>
+                                                                            <div class="col-md-12">
+                                                                                <table border="0" id="logic" class=" table-striped" width="100%" style="color:black;">
+                                                                                    <thead class="thead-dark">
+                                                                                        <tr class="bg-dark text-white" style="text-align: center;">
+                                                                                            <th>Date</th>
+                                                                                            <th>Transactions</th>
+                                                                                            <th>Bill Number</th>
+                                                                                            <th>Total</th>
+                                                                                            <th>Balance</th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody style="text-align: center;">
+                                                                                        {% for invoices in invs %}
+                                                                                            <tr>
+                                                                                                <td>{{ invoices.invoicedate | date:'d-m-Y' }}</td>
+                                                                                                <td>Invoice</td>
+                                                                                                <td>{{ invoices.invoiceno }}</td>
+                                                                                                <td>{{ invoices.grandtotal }}</td>
+                                                                                                <td>{{ invoices.baldue }}</td>
+                                                                                            </tr>
+                                                                                        {% endfor %}
+                                                        
+                                                                                        {% for i in payme %}
+                                                                                            <tr>
+                                                                                                <td>{{ i.paymdate  | date:'d-m-Y' }}</td>
+                                                                                                <td>Customer Payment</td>
+                                                                                                <td>{{ i.refno }}</td>
+                                                                                                <td>{{ i.amtcredit }}</td>
+                                                                                                <td>{{ i.balance }}</td>
+                                                                                            </tr>
+                                                                                        {% endfor %}
+                                                        
+                                                                                        {% for estimate in est1 %}
+                                                                                            <tr>
+                                                                                                <td>{{ estimate.estimatedate | date:'d-m-Y' }}</td>
+                                                                                                <td>Estimate</td>
+                                                                                                <td>{{ estimate.estimateno }}</td>
+                                                                                                <td>{{ i.amtcredit }}</td>
+                                                                                                <td>{{ estimate.estimatetotal }}</td>
+                                                                                            </tr>
+                                                                                        {% endfor %}
+                                                                                        {% for sale in sel1 %}
+                                                                                            <tr>
+                                                                                                <td>{{ sale.saledate | date:'d-m-Y' }}</td>
+                                                                                                <td>Sales Order</td>
+                                                                                                <td>{{ sale.saleno }}</td>
+                                                                                                <td>{{ sale.salestotal }}</td>
+                                                                                                <td>{{ sale.balance }}</td>
+                                                                                            </tr>
+                                                                                        {% endfor %}
 
-                                                                        </tbody >
-                                                                    </table>
-                                                                    <br>
-                                                                    <br>
-                                                                    <br>
-                                                                    <br>
-                                                                    <br>
-                                                                </div>
+                                                                                    </tbody >
+                                                                                </table>
+                                                                                <br>
+                                                                                <br>
+                                                                                <br>
+                                                                                <br>
+                                                                                <br>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -824,12 +821,16 @@
                         <div  style="text-align: right;">
                             <h6 class="mb-0 mr-5" >Address&nbsp;&nbsp;: &nbsp;&nbsp;{{customer.street}},<br>{{customer.city}},{{customer.state}},{{customer.pincode}}</h6><br>
                             <h6 class="mb-0 " style="margin-right: 9vh;">GSTIN&nbsp;&nbsp;:&nbsp;&nbsp;{{customer.gstin}}</h6>
+                            <input type="text" id="search" placeholder="Search..." class="form-control " autocomplete="off" 
+                            style="margin-top: 8px; background-color: #2f516f;color: white; width:50vh; margin-left: -15vh;">
                         </div>
+
+
                     </div>
 
                     <div class="container-fluid">
                         <div class="row ">
-                            <table class="table table-responsive-md mt-5 mr-5 ml-5 table-hover text-center" id="transactiontable">
+                            <table class="table table-responsive-md mr-5 ml-5 mt-3 table-hover text-center" id="transactiontable">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -912,6 +913,22 @@
             });
         });
     </script>
+
+<script>
+        $(document).ready(function() {
+        var $rows = $('.table tbody tr');
+        $('#search').keyup(function() {
+            var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+            $rows.show().filter(function() {
+                console.log($rows.show())
+
+                var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                console.log(text)
+                return !~text.indexOf(val);
+            }).hide();
+        });
+    });
+</script>
 
 <script>
     function printtable(){

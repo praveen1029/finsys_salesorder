@@ -27676,6 +27676,12 @@ def convert_to_inv(request,pk):
     sale = salesorder.objects.get(id=pk)
     salename = sale.salename.split(" ")[1:]
     name = ' '.join(salename)
+
+    if sale.paidoff:
+        amt=float(sale.paidoff)
+    else:
+        amt = 0
+
     inv = invoice(customername=name, email=sale.saleemail,
         invoiceno=sale.saleno,
         invoicedate=sale.saledate,
@@ -27691,12 +27697,13 @@ def convert_to_inv(request,pk):
         shipping_charge = sale.shipping_charge,
         taxamount = sale.taxamount,
         grandtotal=sale.salestotal,
-        amtrecvd=float(sale.paidoff), 
+        amtrecvd=amt, 
         baldue=sale.balance)
     inv.save()
 
     inv_id = invoice.objects.last()
     sal_itm = sales_item.objects.filter(salesorder=pk)
+    
     for item in sal_itm:
         inv_itm = invoice_item(invoice=inv_id, hsn=item.hsn ,qty =item.qty ,price =item.price ,total =item.total ,
                                cid=item.cid, product =item.product , tax= item.tax ,discount =item.discount )
@@ -27721,9 +27728,14 @@ def convert_to_reccinv(request,pk):
     else:
         ord_no = rec_inv.recinvoiceid+1
 
+    if sale.paidoff:
+        amt=float(sale.paidoff)
+    else:
+        amt = 0
+
     rec = recinvoice(customername=name, email=sale.saleemail, profilename=name, taxamount=float(sale.taxamount),
                     baldue=sale.balance, recinvoiceno=sale.saleno, terms=sale.term_days, startdate=sale.saledate, enddate=sale.shipmentdate, bname=sale.saleaddress,
-                    placosupply=sale.placeofsupply, amtrecvd=float(sale.paidoff), subtotal=float(sale.subtotal), recinvoice_orderno = ord_no,
+                    placosupply=sale.placeofsupply, amtrecvd=amt, subtotal=float(sale.subtotal), recinvoice_orderno = ord_no,
                     grandtotal=sale.salestotal, IGST=sale.IGST, CGST=sale.CGST, SGST=sale.SGST, note=sale.note, cid=sale.cid, gsttype=cust.gsttype)
 
     rec.save()
@@ -27811,6 +27823,28 @@ def newsalesorder(request):
     else:
         ref_no = 1
         ord_no = 1001
+
+    sel = salesorder.objects.filter(cid=cmp1).last()
+    if sel:
+        ord_no = str(sel.saleno)
+        numbers = []
+        stri = []
+        for word in ord_no:
+            if word.isdigit():
+                numbers.append(word)
+            else:
+                stri.append(word)
+        
+        num=''
+        for i in numbers:
+            num +=i
+        
+        st = ''
+        for j in stri:
+            st = st+j
+
+        ord_no = int(num)+1
+        ord_no = st+ str(ord_no)
 
     sale_list = ''
     sale_ord = salesorder.objects.all()
@@ -34106,7 +34140,7 @@ def itemdata(request):
         item = itemtable.objects.get(name=id,cid=cmp1)
         hsn = item.hsn
         qty = item.stock
-        price = item.purchase_cost
+        price = item.sales_cost
         gst = item.intra_st
         sgst = item.inter_st
         places=cmp1.state

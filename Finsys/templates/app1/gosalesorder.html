@@ -176,29 +176,13 @@
                                                 </td>
                                                 {% else %}
                                                 <td style="text-align: center;">
-                                                    <div class="dropdown">
-                                                        <a type="button" class="btn btn-outline-info rounded-pill  text-grey dropdown-toggle"
-                                                                data-toggle="dropdown"> Convert To
-                                                        </a>
-                                                        <div class="dropdown-menu " style="background-color: black;">
-                                                            <a class="dropdown-item" href="{% url 'convert_to_inv' sale.id %}"
-                                                                style="height: 40px; font-size: 15px; color: white; text-align: center;" >Invoice</a>                 
-                                                        </div> 
-                                                    </div>
+                                                    <span class="text-success">Converted</span>
                                                 </td>
                                                 {% endif %}
                                             {% else %}
                                                 {% if sale.salcrd_status == 0 %}
                                                 <td style="text-align: center;">
-                                                    <div class="dropdown">
-                                                        <a type="button" class="btn btn-outline-info rounded-pill  text-grey dropdown-toggle"
-                                                                data-toggle="dropdown"> Convert To
-                                                        </a>
-                                                        <div class="dropdown-menu " style="background-color: black;">
-                                                        <a class="dropdown-item " href="{% url 'convert_to_reccinv' sale.id %}"
-                                                            style="height: 40px; font-size: 15px; color: white; text-align: center; " >Recurring Invoice </a>                    
-                                                        </div> 
-                                                    </div>
+                                                    <span class="text-success">Converted</span>
                                                 </td>
                                                 {% else %}
                                                 <td style="text-align: center;">
