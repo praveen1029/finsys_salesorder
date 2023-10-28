@@ -662,7 +662,7 @@
                     <div class="col-md-4 mt-3">
                         <label for="gsttype">GST type</label>
                         <select class="custom-select" id="gsttype" name="gsttype"
-                                onclick="hidinput('hello1',this)   "
+                                onchange="hidinput('hello1',this)   "
                                 
                                 required
                                 style="background-color: 43596c; color: white;">
@@ -3551,7 +3551,7 @@ $(document).on('change','#plosu',function()   {
                 success: function(data) {
                     var dropdown = $('.product');
                     dropdown.empty();
-                    dropdown.append(`<option selected>Select Item</option>`);
+                    dropdown.append(`<option selected hidden>Select Item</option>`);
                     $.each(data, function(key, value) {
                     
                         dropdown.append($('<option></option>').attr('value', key).text(value).val(value));
@@ -3640,10 +3640,11 @@ $(document).on('change','#plosu',function()   {
         }
    
         function hidinput(divId, element) {
-            if (element.value == 'GST-registered-Regular') {
-                document.getElementById(divId).style.display = 'block';
-            } else {
+            if (element.value == 'unregistered Business'  || element.value == 'Consumer' || element.value == 'Overseas') {
                 document.getElementById(divId).style.display = 'none';
+            } else {
+                document.getElementById(divId).style.display = 'block';
+                document.getElementById("gstin").value = '';
             }
         }
 

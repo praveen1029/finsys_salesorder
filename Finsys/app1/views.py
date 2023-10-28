@@ -1124,7 +1124,7 @@ def updatecustomer(request, id):
         custom.credit_limit = request.POST['crd_lmt']
 
         custom.save()
-        return redirect('gocustomers')
+        return redirect('customer_profile',id)
     except:
         return redirect('gocustomers')
 
@@ -26649,7 +26649,6 @@ def customer_profile(request,id):
     bal=0
     if prebalance !=0:
         bal=prebalance
-        
 
 
     for i in statment:
@@ -26663,9 +26662,6 @@ def customer_profile(request,id):
 
         i.save() 
          
-        
-
-
     invoiced=0
     sum=0
     sum2=0
@@ -26687,18 +26683,17 @@ def customer_profile(request,id):
     for i in invo2:
         if i.baldue:
             resum +=i.baldue
-         
-
-
-
-
-
 
     baldue=invoiced+prebalance-re
-    invs = invoice.objects.filter(cid=cmp1,customername=su,).all() 
-    payme = payment.objects.filter(cid=cmp1,customer=su,).all()  
-    est1 = estimate.objects.filter(cid=cmp1,customer=su,).all()   
+
+    est1 = estimate.objects.filter(cid=cmp1,customer=str(id)+ " " +su).all()   
     sel1 = salesorder.objects.filter(cid=cmp1,salename=str(id)+ " " +su).all() 
+    invs = invoice.objects.filter(cid=cmp1,customername=str(id)+ " " +su).all() 
+    crd_note = salescreditnote.objects.filter(cid=cmp1,customer=str(id)+ " " +su).all()
+    payme = payment.objects.filter(cid=cmp1,customer=su).all()  
+    ret_inv = RetainerInvoices.objects.filter(cid=cmp1,customer=su).all()
+    deli = challan.objects.filter(cid=cmp1,customer=id).all()
+    recc_inv = recinvoice.objects.filter(cid=cmp1,customername=su).all()
     context = {'customer': custo,
                 'cmp1': cmp1,
                 'inv':inv,
@@ -26717,10 +26712,12 @@ def customer_profile(request,id):
                 'resum':resum,
                 'bal_amount':prebalance,
                 'tod':to,
-                'act':act
-
-                
-     }
+                'act':act,
+                'crd_note':crd_note,
+                'ret_inv':ret_inv,
+                'deli':deli,
+                'recc_inv':recc_inv
+            }
     return render(request, 'app1/customer_view.html', context)
 
 def active_cust(request,pk):
@@ -27844,7 +27841,14 @@ def newsalesorder(request):
             st = st+j
 
         ord_no = int(num)+1
-        ord_no = st+ str(ord_no)
+
+        if num[0] == '0':
+            if ord_no <10:
+                ord_no = st+'0'+ str(ord_no)
+            else:
+                ord_no = st+ str(ord_no)
+        else:
+            ord_no = st+ str(ord_no)
 
     sale_list = ''
     sale_ord = salesorder.objects.all()
@@ -27852,6 +27856,7 @@ def newsalesorder(request):
         sale_list = s.saleno+ ',' + sale_list
 
     terms  = PaymentTerms.objects.filter(cid=cmp1)
+
 
     context = {'sel1': sel1, 'customers': customers, 'cmp1': cmp1, 'inv': inv, 'bun': bun, 'noninv': noninv,'item':item,'sale_list':sale_list,
                 'ser': ser, 'tod': tod,'unit':unit,'acc':acc,'acc1':acc1,'ref_no':ref_no,'ord_no':ord_no,'terms':terms,'bank':bank}
@@ -27975,22 +27980,22 @@ def createsales_record(request):
             sel2.file=request.FILES.get('file')                    
         sel2.save()
 
-        product = request.POST.getlist("product[]")
-        hsn  = request.POST.getlist("hsn[]")
+        product = tuple(request.POST.getlist("product[]"))
+        hsn  = tuple(request.POST.getlist("hsn[]"))
         # description = request.POST.getlist("description[]")
-        qty = request.POST.getlist("qty[]")
-        price = request.POST.getlist("price[]")
-        discount = request.POST.getlist("discount[]")
+        qty = tuple(request.POST.getlist("qty[]"))
+        price = tuple(request.POST.getlist("price[]"))
+        discount = tuple(request.POST.getlist("discount[]"))
         if request.POST.get('placosupply') == cmp1.state:
-                tax = request.POST.getlist("tax1[]")
+                tax = tuple(request.POST.getlist("tax1[]"))
         else:
-                tax = request.POST.getlist("tax2[]")
+                tax = tuple(request.POST.getlist("tax2[]"))
         # print(tax)
-        total = request.POST.getlist("total[]")
+        total = tuple(request.POST.getlist("total[]"))
 
         salesorderid=salesorder.objects.get(id =sel2.id)
 
-        if len(product)==len(hsn)==len(qty)==len(price)==len(tax)==len(discount)==len(total) and product and hsn and qty and price and tax and discount and total:
+        if len(product)==len(hsn)==len(qty)==len(price)==len(tax)==len(discount)==len(total):
             mapped=zip(product,hsn, qty,price,tax,discount, total)
             mapped=list(mapped)
             for ele in mapped:
@@ -28065,9 +28070,7 @@ def sales_order_view(request,id):
         'cmp1':cmp1,
         'saleitem':saleitem,
         'cust' : cust
-
     }
-
 
     return render(request,'app1/sales_order_view.html',context)
 
@@ -28204,16 +28207,16 @@ def updatesale(request, id):
 
         upd.save()
 
-        product = request.POST.getlist("product[]")
-        hsn  = request.POST.getlist("hsn[]")
-        description = request.POST.getlist("description[]")
-        qty = request.POST.getlist("qty[]")
-        price = request.POST.getlist("price[]")
+        product = tuple(request.POST.getlist("product[]"))
+        hsn  = tuple(request.POST.getlist("hsn[]"))
+        description = tuple(request.POST.getlist("description[]"))
+        qty =tuple( request.POST.getlist("qty[]"))
+        price = tuple(request.POST.getlist("price[]"))
         
-        tax = request.POST.getlist("tax[]")
-        total = request.POST.getlist("total[]")
+        tax = tuple(request.POST.getlist("tax[]"))
+        total = tuple(request.POST.getlist("total[]"))
 
-        itemid = request.POST.getlist("id[]")
+        itemid = tuple(request.POST.getlist("id[]"))
 
         saleid=salesorder.objects.get(id =upd.id)
         # import pdb; pdb.set_trace()
@@ -38452,10 +38455,11 @@ def customers21(request):
                             shipstreet=request.POST.get('shipstreet'), shipcity=request.POST.get('shipcity'),
                             shipstate=request.POST.get('shipstate'),shippincode=request.POST.get('shippincode'), 
                             shipcountry=request.POST.get('shipcountry'),cid=cmp1)
+
+            cust.save()
             
             customer1 = customer.objects.get(customerid = cust.customerid,cid=cmp1)
                                     
-                            
             temp=request.POST.get('openbalance')
             if temp != "":
                 customer1.opening_balance =temp

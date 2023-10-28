@@ -371,9 +371,6 @@
                                         Edit
                                     </a>
                                 </div>
-    
-    
-    
                             </div>
                         </div> 
                     </div>
@@ -636,7 +633,7 @@
                                 </div>
                                 <div class="d-flex justify-content-between mb-4">
                                     <h5 class="">Opening Balance</h5>
-                                    <h6>{{ customer.opening_balance }}</h6>
+                                    <h6 id="open1">{{ customer.opening_balance }}</h6>
                                 </div>
                                 <div class="d-flex justify-content-between mb-4">
                                     <h5 class="">Credit Limit</h5>
@@ -644,7 +641,7 @@
                                 </div>
                                 <div class="d-flex justify-content-between mb-4">
                                     <h5 class="">Balance</h5>
-                                    <h6>{{ customer.opening_balance }}</h6>
+                                    <h6 id="open2">{{ customer.opening_balance }}</h6>
                                 </div>
                                 <hr class="my-4" style="background-color: #fff;">
                             </div>
@@ -700,7 +697,7 @@
                                                                                     <div class="d-flex justify-content-between" style="color: black;">
                                                                                         <p class="" style="font-weight: bold;">Opening balance</p>
                                                                                         <p>:</p>
-                                                                                        <p>{{ bal_amount }}</p>
+                                                                                        <p id="open3">{{ bal_amount }}</p>
                                                                                     </div>
                                                                                     <div class="d-flex justify-content-between " style="color: black;">
                                                                                         <p class="" style="font-weight: bold;">Invoiced Amount</p>
@@ -715,7 +712,7 @@
                                                                                     <div class="d-flex justify-content-between " style="color: black;">
                                                                                         <p class="" style="font-weight: bold;">Balance Due</p>
                                                                                         <p>:</p>
-                                                                                        <p>{{ baldue }}</p>
+                                                                                        <p id="open4">{{ baldue }}</p>
                                                                                     </div>
                                                                                 </div>
                                                                             </div><br>
@@ -731,46 +728,86 @@
                                                                                         </tr>
                                                                                     </thead>
                                                                                     <tbody style="text-align: center;">
-                                                                                        {% for invoices in invs %}
-                                                                                            <tr>
-                                                                                                <td>{{ invoices.invoicedate | date:'d-m-Y' }}</td>
-                                                                                                <td>Invoice</td>
-                                                                                                <td>{{ invoices.invoiceno }}</td>
-                                                                                                <td>{{ invoices.grandtotal }}</td>
-                                                                                                <td>{{ invoices.baldue }}</td>
-                                                                                            </tr>
-                                                                                        {% endfor %}
-                                                        
-                                                                                        {% for i in payme %}
-                                                                                            <tr>
-                                                                                                <td>{{ i.paymdate  | date:'d-m-Y' }}</td>
-                                                                                                <td>Customer Payment</td>
-                                                                                                <td>{{ i.refno }}</td>
-                                                                                                <td>{{ i.amtcredit }}</td>
-                                                                                                <td>{{ i.balance }}</td>
-                                                                                            </tr>
-                                                                                        {% endfor %}
-                                                        
                                                                                         {% for estimate in est1 %}
-                                                                                            <tr>
-                                                                                                <td>{{ estimate.estimatedate | date:'d-m-Y' }}</td>
-                                                                                                <td>Estimate</td>
-                                                                                                <td>{{ estimate.estimateno }}</td>
-                                                                                                <td>{{ i.amtcredit }}</td>
-                                                                                                <td>{{ estimate.estimatetotal }}</td>
-                                                                                            </tr>
+                                                                                        <tr>
+                                                                                            <td>{{ estimate.estimatedate | date:'d-m-Y' }}</td>
+                                                                                            <td>Estimate</td>
+                                                                                            <td>{{ estimate.estimateno }}</td>
+                                                                                            <td>{{ i.estimatetotal }}</td>
+                                                                                            <td>{{ estimate.estimatetotal }}</td>
+                                                                                        </tr>
                                                                                         {% endfor %}
+                                                                                                
                                                                                         {% for sale in sel1 %}
-                                                                                            <tr>
-                                                                                                <td>{{ sale.saledate | date:'d-m-Y' }}</td>
-                                                                                                <td>Sales Order</td>
-                                                                                                <td>{{ sale.saleno }}</td>
-                                                                                                <td>{{ sale.salestotal }}</td>
-                                                                                                <td>{{ sale.balance }}</td>
-                                                                                            </tr>
+                                                                                        <tr>
+                                                                                            <td>{{ sale.saledate | date:'d-m-Y' }}</td>
+                                                                                            <td>Sales Order</td>
+                                                                                            <td>{{ sale.saleno }}</td>
+                                                                                            <td>{{ sale.salestotal }}</td>
+                                                                                            <td>{{ sale.balance }}</td>
+                                                                                        </tr>
                                                                                         {% endfor %}
-
-                                                                                    </tbody >
+                                                                                        
+                                                                                        {% for invoices in invs %}
+                                                                                        <tr>
+                                                                                            <td>{{ invoices.invoicedate | date:'d-m-Y' }}</td>
+                                                                                            <td>Invoice</td>
+                                                                                            <td>{{ invoices.invoiceno }}</td>
+                                                                                            <td>{{ invoices.grandtotal }}</td>
+                                                                                            <td>{{ invoices.baldue }}</td>
+                                                                                        </tr>
+                                                                                        {% endfor %}
+                                                    
+                                                                                        {% for note in crd_note %}
+                                                                                        <tr>
+                                                                                            <td>{{ note.creditdate | date:'d-m-Y' }}</td>
+                                                                                            <td>Credit Note</td>
+                                                                                            <td>{{ note.credit_no }}</td>
+                                                                                            <td>{{ note.grandtotal }}</td>
+                                                                                            <td>{{ note.grandtotal }}</td>
+                                                                                        </tr>
+                                                                                        {% endfor %}
+                                                                                                                                    
+                                                                                        {% for i in payme %}
+                                                                                        <tr>
+                                                                                            <td>{{ i.paymdate  | date:'d-m-Y' }}</td>
+                                                                                            <td>Customer Payment</td>
+                                                                                            <td>{{ i.refno }}</td>
+                                                                                            <td>{{ i.amtcredit }}</td>
+                                                                                            <td>{{ i.balance }}</td>
+                                                                                        </tr>
+                                                                                        {% endfor %}
+                                                            
+                                                                                        {% for inv in ret_inv %}
+                                                                                        <tr>
+                                                                                            <td>{{ inv.invoice_date  | date:'d-m-Y' }}</td>
+                                                                                            <td>Retainer Invoice</td>
+                                                                                            <td>{{ inv.invoice_number }}</td>
+                                                                                            <td>{{ inv.total_amount }}</td>
+                                                                                            <td>{{ inv.total_amount }}</td>
+                                                                                        </tr>
+                                                                                        {% endfor %}
+                                                            
+                                                                                        {% for dl in deli %}
+                                                                                        <tr>
+                                                                                            <td>{{ dl.challan_date  | date:'d-m-Y' }}</td>
+                                                                                            <td>Delivary Challan</td>
+                                                                                            <td>{{ dl.chal_no }}</td>
+                                                                                            <td>{{ dl.grand }}</td>
+                                                                                            <td>{{ dl.grand }}</td>
+                                                                                        </tr>
+                                                                                        {% endfor %}
+                                                            
+                                                                                        {% for rec in recc_inv %}
+                                                                                        <tr>
+                                                                                            <td>{{ rec.startdate  | date:'d-m-Y' }}</td>
+                                                                                            <td>Reccuring Invoice</td>
+                                                                                            <td>{{ rec.recinvoiceno }}</td>
+                                                                                            <td>{{ rec.grandtotal }}</td>
+                                                                                            <td>{{ rec.baldue }}</td>
+                                                                                        </tr>
+                                                                                        {% endfor %}
+                                                                                    </tbody>
                                                                                 </table>
                                                                                 <br>
                                                                                 <br>
@@ -820,7 +857,9 @@
                         </div>
                         <div  style="text-align: right;">
                             <h6 class="mb-0 mr-5" >Address&nbsp;&nbsp;: &nbsp;&nbsp;{{customer.street}},<br>{{customer.city}},{{customer.state}},{{customer.pincode}}</h6><br>
+                            {% if customer.gstin %}
                             <h6 class="mb-0 " style="margin-right: 9vh;">GSTIN&nbsp;&nbsp;:&nbsp;&nbsp;{{customer.gstin}}</h6>
+                            {% endif %}
                             <input type="text" id="search" placeholder="Search..." class="form-control " autocomplete="off" 
                             style="margin-top: 8px; background-color: #2f516f;color: white; width:50vh; margin-left: -15vh;">
                         </div>
@@ -842,6 +881,28 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {% for estimate in est1 %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ estimate.estimatedate | date:'d-m-Y' }}</td>
+                                        <td>Estimate</td>
+                                        <td>{{ estimate.estimateno }}</td>
+                                        <td>{{ i.amtcredit }}</td>
+                                        <td>{{ estimate.estimatetotal }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                            
+                                    {% for sale in sel1 %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ sale.saledate | date:'d-m-Y' }}</td>
+                                        <td>Sales Order</td>
+                                        <td>{{ sale.saleno }}</td>
+                                        <td>{{ sale.salestotal }}</td>
+                                        <td>{{ sale.balance }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    
                                     {% for invoices in invs %}
                                     <tr>
                                         <td></td>
@@ -852,7 +913,18 @@
                                         <td>{{ invoices.baldue }}</td>
                                     </tr>
                                     {% endfor %}
-        
+
+                                    {% for note in crd_note %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ note.creditdate | date:'d-m-Y' }}</td>
+                                        <td>Credit Note</td>
+                                        <td>{{ note.credit_no }}</td>
+                                        <td>{{ note.grandtotal }}</td>
+                                        <td>{{ note.grandtotal }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                                                                
                                     {% for i in payme %}
                                     <tr>
                                         <td></td>
@@ -864,24 +936,36 @@
                                     </tr>
                                     {% endfor %}
         
-                                    {% for estimate in est1 %}
+                                    {% for inv in ret_inv %}
                                     <tr>
                                         <td></td>
-                                        <td>{{ estimate.estimatedate | date:'d-m-Y' }}</td>
-                                        <td>Estimate</td>
-                                        <td>{{ estimate.estimateno }}</td>
-                                        <td>{{ i.amtcredit }}</td>
-                                        <td>{{ estimate.estimatetotal }}</td>
+                                        <td>{{ inv.invoice_date  | date:'d-m-Y' }}</td>
+                                        <td>Retainer Invoice</td>
+                                        <td>{{ inv.invoice_number }}</td>
+                                        <td>{{ inv.total_amount }}</td>
+                                        <td>{{ inv.total_amount }}</td>
                                     </tr>
                                     {% endfor %}
-                                    {% for sale in sel1 %}
+        
+                                    {% for dl in deli %}
                                     <tr>
                                         <td></td>
-                                        <td>{{ sale.saledate | date:'d-m-Y' }}</td>
-                                        <td>Sales Order</td>
-                                        <td>{{ sale.saleno }}</td>
-                                        <td>{{ sale.salestotal }}</td>
-                                        <td>{{ sale.balance }}</td>
+                                        <td>{{ dl.challan_date  | date:'d-m-Y' }}</td>
+                                        <td>Delivary Challan</td>
+                                        <td>{{ dl.chal_no }}</td>
+                                        <td>{{ dl.grand }}</td>
+                                        <td>{{ dl.grand }}</td>
+                                    </tr>
+                                    {% endfor %}
+        
+                                    {% for rec in recc_inv %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ rec.startdate  | date:'d-m-Y' }}</td>
+                                        <td>Reccuring Invoice</td>
+                                        <td>{{ rec.recinvoiceno }}</td>
+                                        <td>{{ rec.grandtotal }}</td>
+                                        <td>{{ rec.baldue }}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -1052,5 +1136,23 @@ $('.delete').click(function(event) {
 });
 
     </script> 
+
+    <script>
+       val1 =  document.getElementById('open1').innerHTML
+       val2 =  document.getElementById('open2').innerHTML
+       val3 =  document.getElementById('open3').innerHTML
+       val4 =  document.getElementById('open4').innerHTML
+
+       if(val1==0){
+        val1 = val1.slice(1,);
+        val2 = val1.slice(0,);
+        val3 = val1.slice(0,);
+        val4 = val1.slice(0,);
+       }
+       document.getElementById('open1').innerHTML = val1
+       document.getElementById('open2').innerHTML = val2
+       document.getElementById('open3').innerHTML = val3
+       document.getElementById('open4').innerHTML = val4
+    </script>
 {% endif %}
 {% endblock %}

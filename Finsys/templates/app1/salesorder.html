@@ -37,7 +37,7 @@
                         <div class="d-flex">
                             <label class="col-form-label">Sales Order No.</label><span class="text-danger mt-1 ml-3" id="dangerdiv" style="display: none;"><span class="text-white"> (</span>This Id Should be Continous <span class="text-white">)</span></span>
                         </div>
-                        <input type="text" class="form-control" name="ord_no"  id="ord_no" style="background-color: #43596c;"><br>
+                        <input type="text" class="form-control" name="ord_no"  id="ord_no" style="background-color: #43596c;" placeholder="{{ord_no}}"><br>
                         
 
                         <label class="col-form-label mt-2">Customer</label>
@@ -1984,7 +1984,7 @@ $(document).ready(function(){
                 var dropdown = $('.product');
                 console.log(data)
                 dropdown.empty();
-                dropdown.append(`<option selected>Select Item</option>`);
+                dropdown.append(`<option selected hidden>Select Item</option>`);
                 $.each(data, function(key, value) {
                 
                     dropdown.append($('<option></option>').attr('value', key).text(value).val(value));

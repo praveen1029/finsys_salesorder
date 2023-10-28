@@ -279,5 +279,32 @@ body{
         });
     });
 </script>
+
+<script>
+    // Get all the table cells in the second column
+    const cells1 = document.querySelectorAll('table tbody tr td:nth-child(5)');
+
+    // Iterate through the cells and convert negative values to positive
+    cells1.forEach(cell => {
+        const value = parseInt(cell.textContent);
+        if (value == 0) {
+            cell.textContent = Math.abs(value);
+        }
+    });
+</script>
+
+<script>
+    // Get all the table cells in the second column
+    const cells2 = document.querySelectorAll('table tbody tr td:nth-child(7)');
+
+    // Iterate through the cells and convert negative values to positive
+    cells2.forEach(cell => {
+        const value = parseInt(cell.textContent);
+        if (value == 0) {
+            cell.textContent = Math.abs(value);
+        }
+    });
+</script>
+
 {% endif %}
 {% endblock %}
