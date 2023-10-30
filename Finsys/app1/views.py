@@ -1096,37 +1096,37 @@ def editcustomer(request, id):
 
 @login_required(login_url='regcomp')
 def updatecustomer(request, id):
-    try:
-        cmp1 = company.objects.get(id=request.session["uid"])
-        custom = customer.objects.get(customerid=id, cid=cmp1)
-        custom.title = request.POST['title']
-        custom.firstname = request.POST['firstname']
-        custom.lastname = request.POST['lastname']
-        custom.company = request.POST['company']
-        custom.location = request.POST['location']
-        custom.gsttype = request.POST['gsttype']
+    cmp1 = company.objects.get(id=request.session["uid"])
+    custom = customer.objects.get(customerid=id, cid=cmp1)
+    custom.title = request.POST['title']
+    custom.firstname = request.POST['firstname']
+    custom.lastname = request.POST['lastname']
+    custom.company = request.POST['company']
+    custom.location = request.POST['location']
+    custom.gsttype = request.POST['gsttype']
+    if 'gstin' in request.POST :
         custom.gstin = request.POST['gstin']
-        custom.panno = request.POST['panno']
-        custom.email = request.POST['email']
-        custom.website = request.POST['website']
-        custom.mobile = request.POST['mobile']
-        custom.street = request.POST['street']
-        custom.city = request.POST['city']
-        custom.state = request.POST['state']
-        custom.pincode = request.POST['pincode']
-        custom.country = request.POST['country']
-        custom.shipstreet = request.POST['shipstreet']
-        custom.shipcity = request.POST['shipcity']
-        custom.shipstate = request.POST['shipstate']
-        custom.shippincode = request.POST['shippincode']
-        custom.shipcountry = request.POST['shipcountry']
-        custom.opening_balance = request.POST['openbalance']
-        custom.credit_limit = request.POST['crd_lmt']
 
-        custom.save()
-        return redirect('customer_profile',id)
-    except:
-        return redirect('gocustomers')
+    custom.panno = request.POST['panno']
+    custom.email = request.POST['email']
+    custom.website = request.POST['website']
+    custom.mobile = request.POST['mobile']
+    custom.street = request.POST['street']
+    custom.city = request.POST['city']
+    custom.state = request.POST['state']
+    custom.pincode = request.POST['pincode']
+    custom.country = request.POST['country']
+    custom.shipstreet = request.POST['shipstreet']
+    custom.shipcity = request.POST['shipcity']
+    custom.shipstate = request.POST['shipstate']
+    custom.shippincode = request.POST['shippincode']
+    custom.shipcountry = request.POST['shipcountry']
+    custom.opening_balance = request.POST['openbalance']
+    custom.credit_limit = request.POST['crd_lmt']
+
+    custom.save()
+    
+    return redirect('customer_profile',id)
 
 
 @login_required(login_url='regcomp')
@@ -26694,6 +26694,7 @@ def customer_profile(request,id):
     ret_inv = RetainerInvoices.objects.filter(cid=cmp1,customer=su).all()
     deli = challan.objects.filter(cid=cmp1,customer=id).all()
     recc_inv = recinvoice.objects.filter(cid=cmp1,customername=su).all()
+    mjour = mjournal1.objects.filter(cid=cmp1,contact=su).all()
     context = {'customer': custo,
                 'cmp1': cmp1,
                 'inv':inv,
@@ -26716,7 +26717,8 @@ def customer_profile(request,id):
                 'crd_note':crd_note,
                 'ret_inv':ret_inv,
                 'deli':deli,
-                'recc_inv':recc_inv
+                'recc_inv':recc_inv,
+                'mjour':mjour
             }
     return render(request, 'app1/customer_view.html', context)
 
@@ -28060,11 +28062,10 @@ def sale_create_item(request):
 def sales_order_view(request,id):
     cmp1 = company.objects.get(id=request.session['uid'])
     upd = salesorder.objects.get(id=id, cid=cmp1)
-    sale_no = upd.salename[0]
-
+    sale_fname = upd.salename.split(' ')[1]
+    sale_lname = upd.salename.split(' ')[2]
     saleitem = sales_item.objects.filter(salesorder=id)
-    cust = customer.objects.get(customerid = sale_no)
-
+    cust = customer.objects.get(firstname = sale_fname,lastname=sale_lname,cid=cmp1)
     context ={
         'sale':upd,
         'cmp1':cmp1,
@@ -28483,8 +28484,10 @@ def sale_convert2(request,id):
 
 def sale_filter1(request):
     cmp1 = company.objects.get(id=request.session["uid"])
-    sel1 = salesorder.objects.filter(cid=cmp1,status='Draft').all()
-
+    sel1 = salesorder.objects.filter(cid=cmp1,status='Draft').all().values()
+    for s in sel1:
+        cust = " " . join(s['salename'].split(" ")[1:])
+        s['cust'] = cust
     context = {
             'sel1' :sel1,
             'cmp1': cmp1
@@ -28493,8 +28496,10 @@ def sale_filter1(request):
 
 def sale_filter2(request):
     cmp1 = company.objects.get(id=request.session["uid"])
-    sel1 = salesorder.objects.filter(cid=cmp1,status='Approved').all()
-
+    sel1 = salesorder.objects.filter(cid=cmp1,status='Approved').all().values()
+    for s in sel1:
+        cust = " " . join(s['salename'].split(" ")[1:])
+        s['cust'] = cust
     context = {
             'sel1' :sel1,
             'cmp1': cmp1
@@ -40879,14 +40884,17 @@ def cust_dropdown(request):
     cmp1 = company.objects.get(id=request.session['uid'])
 
     options = {}
-    option_objects = customer.objects.filter(cid = request.session['uid'])
-    print(option_objects)
+    option_objects = customer.objects.filter(cid = cmp1)
+    id_list = []
+    title_list = []
+    first_name = []
+    last_name = []
     for option in option_objects:
-        # print(option.customerid)
-         
-        options[option.customerid] = [option.customerid, option.title , option.firstname, option.lastname]
-         
-    return JsonResponse(options)
+        id_list.append(option.customerid)
+        title_list.append(option.title)
+        first_name.append(option.firstname)
+        last_name.append(option.lastname)
+    return JsonResponse({'id_list':id_list,'title_list':title_list,'first_name':first_name,'last_name':last_name})
 
 #render chart acnt overview page
 @login_required(login_url='login')

@@ -25,9 +25,13 @@
                     <div class="row">
                         <div class="col-md-4 mt-3">
                             <label for="validationCustom01">Title</label>
-                            <input type="text" name="title" value="{{ customer.title }}" class="form-control"
-                                   id="validationCustom01" required
-                                   style="background-color: #2f516f;color: white;">
+                            <select name="title" id="title" class="form-control" id="validationCustom01" style="background-color: #2f516f;">
+                                    <option value="{{ customer.title }}" selected hidden>{{ customer.title }}</option>
+                                    <option value="Mr">Mr</option>
+                                    <option value="Mrs">Mrs</option>
+                                    <option value="Miss">Miss</option>
+                                    <option value="Ms">Ms</option>
+                                </select>
                             <div class="valid-feedback">Looks good!</div>
                         </div>
                         <div class="col-md-4 mt-3">

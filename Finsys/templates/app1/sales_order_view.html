@@ -12,7 +12,7 @@
     <style>
 
      
-        .ribbon .ribbon-inner {
+    .ribbon .ribbon-inner {
     text-align: center;
     color: #fff;
     top: -20px;
@@ -258,8 +258,7 @@ footer p {
     .vl {
         border-left: 6px solid gray;
     }
-
-
+    
     </style>
 
 
@@ -324,7 +323,6 @@ footer p {
     
 
     <div class="page-content"  id="page-content">
-
         <div class="card radius-15">
             <div class="card-body">
                 <div class="card-title">
@@ -399,7 +397,7 @@ footer p {
             </div>
         </div>
 
-        <div id="overviewdiv" >
+        <div id="overviewdiv">
             <div id="details">
                 <div class="row g-0" style="margin-left: 1px; margin-right: 1px;">
                     <div class="col-lg-8" style="background-color: #243e54; border-top-left-radius: 2vh; border-bottom-left-radius: 2vh;">
@@ -483,8 +481,11 @@ footer p {
                                 <div class="col-md-3 mt-3"> 
                                     <h6 class="mb-0">Address</h6>
                                 </div>
-                                <div class="col-md-3 mt-3">
+                                <div class="col-md-3 mt-3 vr">
                                     <p class="mb-0">{{sale.saleaddress}}</p>
+                                </div>
+                                <div class="col-md-6 mt-3 vl">
+                                    <h6 class="mb-0">&nbsp;</h6>
                                 </div>
                             </div>
                             <hr>
@@ -592,14 +593,6 @@ footer p {
                                 <h5 class="">Grand Total</h5>
                                 <h6>{{ sale.salestotal }}</h6>
                             </div><br>
-                            <div class="d-flex justify-content-between mb-4">
-                                <h5 class="">Paid Off</h5>
-                                <h6>{{ sale.paidoff }}</h6>
-                            </div>
-                            <div class="d-flex justify-content-between mb-4">
-                                <h5 class="">Balance</h5>
-                                <h6>{{ sale.balance }}</h6>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -754,17 +747,6 @@ footer p {
                                                     <th style="color: #000;">:</th>
                                                     <th class="text-right" style="color: #000;">{{sale.salestotal}}</th>
                                                 </tr>
-                                                <tr >
-                                                    <td style="color: #000;">Paid Amount</td>
-                                                    <td style="color: #000;">:</td>
-                                                    <th class=" text-right" style="color: #000;">{{sale.paidoff}}</th>
-                                                </tr>
-                                                <tr >
-                                                    <td style="color: #000;">Balance Amount</td>
-                                                    <td style="color: #000;">:</td>
-                                                    <th class="text-right" style="color: #000;">{{sale.balance}}</th>
-                                                </tr>
-        
                                             </tbody>
                                         </table>
                                     </div>
@@ -975,17 +957,6 @@ footer p {
                                                       <th style="color: #000;">:</th>
                                                       <th class="text-right" style="color: #000;">{{sale.salestotal}}</th>
                                                   </tr>
-                                                  <tr >
-                                                      <td style="color: #000;">Paid Amount</td>
-                                                      <td style="color: #000;">:</td>
-                                                      <th class=" text-right" style="color: #000;">{{sale.paidoff}}</th>
-                                                  </tr>
-                                                  <tr >
-                                                      <td style="color: #000;">Balance Amount</td>
-                                                      <td style="color: #000;">:</td>
-                                                      <th class="text-right" style="color: #000;">{{sale.balance}}</th>
-                                                  </tr>
-      
                                               </tbody>
                                           </table>
                                       </div> 
@@ -1141,16 +1112,6 @@ footer p {
                                                     <th class="text-right" style="color: #000;">{{sale.salestotal}}</th>
                                                 </tr>
                                                 <tr >
-                                                    <td style="color: #000;">Paid Amount</td>
-                                                    <td style="color: #000;">:</td>
-                                                    <th class=" text-right" style="color: #000;">{{sale.paidoff}}</th>
-                                                </tr>
-                                                <tr >
-                                                    <td style="color: #000;">Balance Amount</td>
-                                                    <td style="color: #000;">:</td>
-                                                    <th class="text-right" style="color: #000;">{{sale.balance}}</th>
-                                                </tr>
-        
                                             </tbody>
                                         </table>
                                     </div>
@@ -1168,8 +1129,85 @@ footer p {
         </div>
 
         <div id="slipdiv" style="background-color: #243e54; border-radius: 2vh; display: none;">
-            <div class="p-5">
-                <div style="margin-top: -3rem;">
+            <div class="p-5"  >
+                <div class="my-5 page" size="A4">
+                    <div class="row" style="margin-top: 20%;" id="printslip">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-5 ml-4">
+                            <div class="card bg-white" style="border: 1px dotted black;">
+                                <div class="mt-2" style="text-align: center;">
+                                    <div class="text-center" style="font-size: 3vh; color: black;">
+                                        <b>{{cmp1.cname}} </b>
+                                    </div>
+                                    <span style="font-size: x-small; color: black;">{{ cmp1.caddress }} <br>
+                                        {{cmp1.city}},
+                                        {{cmp1.state}}
+                                        {{cmp1.pincode}} <br>
+                                        {{ cmp1.phone }} <br>{{ cmp1.cemail }} 
+                                    </span>
+                                </div>
+                                <div class="ml-4 mt-2" style="color: black;">
+                                    <div class="row">
+                                        <div class="col-md-6 text-left">Order No:</div>
+                                        <div class="col-md-5 text-right">{{sale.saleno}}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 text-left">Customer Name:</div>
+                                        <div class="col-md-5 text-right">{{cust.firstname}} {{cust.lastname}}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 text-left">Order Date :</div>
+                                        <div class="col-md-5 text-right">{{sale.saledate | date:'d-m-Y'}}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 text-left">Shipment Date:</div>
+                                        <div class="col-md-5 text-right">{{sale.shipmentdate | date:'d-m-Y'}}</div>
+                                    </div>
+                                </div>
+                                <div >
+                                    <table class=" table table-hover table-borderless" id="table1">
+                                        <thead class="bg-white ">
+                                            <tr>
+                                                <td style="text-align: left; font-weight:bold; color:black;">
+                                                    Product
+                                                    <div style="margin-top: -1vh; font-weight: lighter;">________</div>
+                                                </td>
+                                                <td style="font-weight:bold; color:black; text-align: right;">
+                                                    Cost
+                                                    <div style="margin-top: -1vh; font-weight: lighter;">________</div>
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                
+                                            {% for j in saleitem %}
+                                            <tr>
+                                                <td style="color:black; text-align: left; background-color: white;">{{j.product}} </td>
+                                                <td style="color:black; text-align: right; background-color: white;">{{j.total}}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="row">
+                                        <div class="col-md-5 text-left ml-2" style=" font-size: large; color: black; font-weight: bold;">
+                                            Total
+                                        </div>
+                                        <div class="col-md-6 text-right ml-2" style="font-size: large; color: black; font-weight: bold;">
+                                            {{ sale.balance }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+                </div>
+
+
+
+                <!-- <div style="margin-top: -3rem;">
                     <div class="my-5 page" size="A4" >
                         <div class="p-5" id="printslip">
                             <div class="row" style="border-bottom: 1px dotted #243e54;">
@@ -1326,7 +1364,7 @@ footer p {
 
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         

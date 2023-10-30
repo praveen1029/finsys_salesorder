@@ -418,7 +418,7 @@
 
         <div class="card card-registration card-registration-2" style="border-radius: 15px;"  >
             <div class="card-body p-0" >
-                <div id="details">
+                <div id="details"  >
                     <div class="row g-0" style="margin-left: 1px; margin-right: 1px;">
                         <div class="col-lg-8">
                             <div class="p-5">
@@ -807,6 +807,16 @@
                                                                                             <td>{{ rec.baldue }}</td>
                                                                                         </tr>
                                                                                         {% endfor %}
+
+                                                                                        {% for m in mjour %}
+                                                                                        <tr>
+                                                                                            <td>{{ m.mjrnl.date   }}</td>
+                                                                                            <td>Manual journal</td>
+                                                                                            <td>{{ m.mjrnl.mj_no }}</td>
+                                                                                            <td>{{ m.mjrnl.total_deb }}</td>
+                                                                                            <td>{{ m.mjrnl.difference }}</td>
+                                                                                        </tr>
+                                                                                        {% endfor %}
                                                                                     </tbody>
                                                                                 </table>
                                                                                 <br>
@@ -832,39 +842,60 @@
                 </div>
                 <div id="transation" style="display: none;" >
                     <div class="row" >
-                        <div class="p-5" style="margin-left: 2vh;">
+                        <div class="mt-5 ml-5" >
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <h1 class="fw-bold mb-0 text-black">{{ customer.title }}. {{ customer.firstname }} {{ customer.lastname }}</h1>
                             </div>
                         </div>
                     </div>
-                    <div class="row" style="margin-top: -8vh; justify-content: space-between;">
-                        <div style="text-align: left; margin-left: 8vh;">
-                            <div class=" d-flex">
-                                <h6 class="mb-0">Phone&nbsp;&nbsp;:&nbsp;&nbsp;</h6>
-                                <p class="mb-0" style="text-align: right;">{{customer.mobile}}</p>
-                            </div> <br>
-
-                            <div class=" d-flex">
-                                <h6 class="mb-0">Email&nbsp;&nbsp;:&nbsp;&nbsp;</h6>
-                                <p class="mb-0" style="text-align: right;">{{customer.email}}</p>
+                    <div class="row ml-4" >
+                        <div class="col-md-3">
+                            <div class="d-flex" >
+                                <div><h6>Email</h6></div>
+                                <div class="ml-2 mr-2"><h6>:</h6></div>
+                                <div><h6>{{customer.email}}</h6></div>
                             </div><br>
-
-                            <div class=" d-flex">
-                                <h6 class="mb-0">Credit Limit&nbsp;&nbsp;:&nbsp;&nbsp;</h6>
-                                <p class="mb-0" style="text-align: right;">{{customer.credit_limit}}</p>
+                            <div class="d-flex">
+                                <div>Credit Limit</div>
+                                <div class="ml-2 mr-2"><h6>:</h6></div>
+                                <div><h6>{{customer.credit_limit}}</h6></div>
+                            </div><br>
+                            <div class="d-flex">
+                                <div>Opening Balance</div>
+                                <div class="ml-2 mr-2"><h6>:</h6></div>
+                                <div><h6>{{customer.opening_balance}}</h6></div>
                             </div>
                         </div>
-                        <div  style="text-align: right;">
-                            <h6 class="mb-0 mr-5" >Address&nbsp;&nbsp;: &nbsp;&nbsp;{{customer.street}},<br>{{customer.city}},{{customer.state}},{{customer.pincode}}</h6><br>
+
+                        <div class="col-md-6"></div>
+
+                        <div class="col-md-3 " >
+                            <div class="d-flex" style="text-align: right;">
+                                <div><h6>Phone</h6></div>
+                                <div class="ml-2 mr-2"><h6>:</h6></div>
+                                <div ><h6 >{{customer.mobile}}</h6></div>
+                            </div><br>
+                            <div class="d-flex">
+                                <div>Address</div>
+                                <div class="ml-2 mr-2"><h6>:</h6></div>
+                                <div><h6>{{customer.street}},<br>{{customer.city}},{{customer.state}},{{customer.pincode}}</h6></div>
+                            </div><br>
                             {% if customer.gstin %}
-                            <h6 class="mb-0 " style="margin-right: 9vh;">GSTIN&nbsp;&nbsp;:&nbsp;&nbsp;{{customer.gstin}}</h6>
+                            <div class="d-flex">
+                                <div>GSTIN</div>
+                                <div class="ml-2 mr-2"><h6>:</h6></div>
+                                <div><h6>{{customer.gstin}}</h6></div>
+                            </div>
                             {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row ml-4">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-3">
                             <input type="text" id="search" placeholder="Search..." class="form-control " autocomplete="off" 
                             style="margin-top: 8px; background-color: #2f516f;color: white; width:50vh; margin-left: -15vh;">
                         </div>
-
-
                     </div>
 
                     <div class="container-fluid">
@@ -966,6 +997,17 @@
                                         <td>{{ rec.recinvoiceno }}</td>
                                         <td>{{ rec.grandtotal }}</td>
                                         <td>{{ rec.baldue }}</td>
+                                    </tr>
+                                    {% endfor %}
+        
+                                    {% for m in mjour %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ m.mjrnl.date   }}</td>
+                                        <td>Manual journal</td>
+                                        <td>{{ m.mjrnl.mj_no }}</td>
+                                        <td>{{ m.mjrnl.total_deb }}</td>
+                                        <td>{{ m.mjrnl.difference }}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
