@@ -258,7 +258,21 @@ footer p {
     .vl {
         border-left: 6px solid gray;
     }
-    
+
+
+        .equal-length-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%; /* Make the container fill the height of the column */
+            margin-left: 2vh;
+            margin-right: 2vh;
+        }
+
+        .equal-length-item {
+            flex: 1;
+            text-align: center;
+        }
     </style>
 
 
@@ -289,6 +303,7 @@ footer p {
 
         // document.getElementById("downloadButton").innerHTML = "Click to download";
     }
+
 
     
 </script>
@@ -1128,12 +1143,12 @@ footer p {
             </div>
         </div>
 
-        <div id="slipdiv" style="background-color: #243e54; border-radius: 2vh; display: none;">
+        <div id="slipdiv" style="background-color: #243e54; border-radius: 2vh; display: none; ">
             <div class="p-5"  >
                 <div class="my-5 page" size="A4">
                     <div class="row" style="margin-top: 20%;" id="printslip">
                         <div class="col-md-3"></div>
-                        <div class="col-md-5 ml-4">
+                        <div class="col-md-6 ml-3">
                             <div class="card bg-white" style="border: 1px dotted black;">
                                 <div class="mt-2" style="text-align: center;">
                                     <div class="text-center" style="font-size: 3vh; color: black;">
@@ -1164,38 +1179,113 @@ footer p {
                                         <div class="col-md-5 text-right">{{sale.shipmentdate | date:'d-m-Y'}}</div>
                                     </div>
                                 </div>
-                                <div >
-                                    <table class=" table table-hover table-borderless" id="table1">
-                                        <thead class="bg-white ">
-                                            <tr>
-                                                <td style="text-align: left; font-weight:bold; color:black;">
-                                                    Product
-                                                    <div style="margin-top: -1vh; font-weight: lighter;">________</div>
-                                                </td>
-                                                <td style="font-weight:bold; color:black; text-align: right;">
-                                                    Cost
-                                                    <div style="margin-top: -1vh; font-weight: lighter;">________</div>
-                                                </td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                
-                                            {% for j in saleitem %}
-                                            <tr>
-                                                <td style="color:black; text-align: left; background-color: white;">{{j.product}} </td>
-                                                <td style="color:black; text-align: right; background-color: white;">{{j.total}}</td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
+                                <div><br>
+                                    <div class="equal-length-container" style="color: black; font-weight: bold;">
+                                        <div class="equal-length-item" style=" text-align: center;">
+                                            Product
+                                            <hr style="border-bottom: 1px solid black; margin-top:1vh; width:95%">
+                                        </div>
+                                        <div class="equal-length-item ml-2"  style=" text-align:center;">
+                                            HSN
+                                            <hr style="border-bottom: 1px solid black; margin-top:1vh; width:60%;">
+                                        </div>
+                                        <div class="equal-length-item"  style=" text-align: center; ">
+                                            Qty
+                                            <hr style="border-bottom: 1px solid black; margin-top:1vh; width:60%">
+                                        </div>
+                                        <div class="equal-length-item"  style=" text-align: center; ">
+                                            Price
+                                            <hr style="border-bottom: 1px solid black; margin-top:1vh; width:60%">
+                                        </div>
+                                        <div class="equal-length-item"  style=" text-align: center; ">
+                                            Tax
+                                            <hr style="border-bottom: 1px solid black; margin-top:1vh; width:60%">
+                                        </div>
+                                        <div class="equal-length-item" style=" text-align: center; ">
+                                            Total
+                                            <hr style="border-bottom: 1px solid black; margin-top:1vh; width:60%">
+                                        </div>
+                                    </div>
                                 </div>
+                                <div>
+                                    {% for j in saleitem %}
+                                    <div class="equal-length-container" style="color: black; font-size: small; word-wrap: break-word; margin-bottom: 1vh;">
+                                        <div class="equal-length-item"  style="text-align: center; margin-left: 2px;">
+                                            {{j.product}}
+                                        </div>
+                                        <div class="equal-length-item" style="text-align: right;">
+                                            {{j.hsn}}
+                                        </div>
+                                        <div class="equal-length-item" style="text-align: center; ">
+                                            {{j.qty}}
+                                        </div>
+                                        <div class="equal-length-item" style="text-align: center; ">
+                                            {{j.price}}
+                                        </div>
+                                        <div class="equal-length-item" style="text-align: center; ">
+                                            {{j.tax}}
+                                        </div>
+                                        <div class="equal-length-item" style="text-align: center; ">
+                                            {{j.total}}
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+
+                                <div><br>
+                                    <div class="row ml-1">
+                                        <div class="col-md-5 text-left" style=" color: black;">
+                                            Discount
+                                        </div>
+                                        <div class="col-md-6 text-right ml-2" style="color: black;">
+                                            {{ tot_dis }}
+                                        </div>
+                                    </div>
+                                    <div class="row ml-1">
+                                        <div class="col-md-5 text-left" style=" color: black;">
+                                            Subtotal
+                                        </div>
+                                        <div class="col-md-6 text-right ml-2" style="color: black;">
+                                            {{ sale.subtotal }}
+                                        </div>
+                                    </div>
+                                    {% if sale.IGST != '0' %}
+                                    <div class="row ml-1">
+                                        <div class="col-md-5 text-left " style=" color: black;">
+                                            IGST
+                                        </div>
+                                        <div class="col-md-6 text-right ml-2" style="color: black;">
+                                            {{ sale.IGST }}
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                    <div class="row ml-1">
+                                        <div class="col-md-5 text-left" style=" color: black;">
+                                            CGST
+                                        </div>
+                                        <div class="col-md-6 text-right ml-2" style="color: black;">
+                                            {{ sale.CGST }}
+                                        </div>
+                                    </div>
+                                    <div class="row ml-1">
+                                        <div class="col-md-5 text-left" style=" color: black;">
+                                            SGST
+                                        </div>
+                                        <div class="col-md-6 text-right ml-2" style="color: black;">
+                                            {{ sale.SGST }}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    <hr class="ml-2 mr-2" style="color: black; border-bottom: 1px solid black; ">
+                                </div>
+
                                 <div class="mb-2">
                                     <div class="row">
                                         <div class="col-md-5 text-left ml-2" style=" font-size: large; color: black; font-weight: bold;">
                                             Total
                                         </div>
                                         <div class="col-md-6 text-right ml-2" style="font-size: large; color: black; font-weight: bold;">
-                                            {{ sale.balance }}
+                                            {{ sale.salestotal }}
                                         </div>
                                     </div>
                                 </div>

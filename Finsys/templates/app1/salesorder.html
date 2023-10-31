@@ -2514,9 +2514,17 @@ $(document).ready(function(){
         openbal = $("#openbalance").val()
         if($('#bal').val()=='credit'){
             if(openbal.slice(0,1) != '-'){
-                document.getElementById("openbalance").value = "-"+openbal
+                if(parseFloat(openbal) != 0){
+                    document.getElementById("openbalance").value = "-"+openbal
+                }else{
+                    document.getElementById("openbalance").value = openbal
+                }
             }else{
-                document.getElementById("openbalance").value = openbal
+                if(parseFloat(openbal) != 0){
+                    document.getElementById("openbalance").value = openbal
+                }else{
+                    document.getElementById("openbalance").value = -1 * parseFloat(openbal)
+                }
             }
         }else{
             document.getElementById("openbalance").value = openbal
@@ -2528,13 +2536,18 @@ $(document).ready(function(){
         if(openbal != ""){
             if($('#bal').val()=='credit'){
                 openbal = $("#openbalance").val()
-                document.getElementById("openbalance").value = "-"+openbal
+                if (parseFloat(openbal) != 0){
+                    document.getElementById("openbalance").value = "-"+openbal
+                }else{
+                    document.getElementById("openbalance").value = openbal
+                }
             }else{
                 openbal = $("#openbalance").val()
-                document.getElementById("openbalance").value = openbal.slice(1,)
+                document.getElementById("openbalance").value = -1*(parseFloat(openbal))
             }
         }
     });
 </script>
        
+
 {% endblock %}

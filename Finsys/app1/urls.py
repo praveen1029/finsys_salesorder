@@ -69,7 +69,6 @@ urlpatterns = [
     re_path(r'^gobun$', views.gobun, name='gobun'),
     re_path(r'^goselpan$', views.goselpan, name='goselpan'),
     re_path(r'^goaddcust$', views.goaddcust, name='goaddcust'),
-    re_path(r'^goaddcust1$', views.goaddcust1, name='goaddcust1'),
 
     re_path(r'^create$', views.create, name='create'),
     re_path(r'^company$', views.company, name='company'),

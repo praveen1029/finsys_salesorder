@@ -1379,10 +1379,6 @@ def goaddcust(request):
         return render(request, 'app1/addcust.html', context)
     except:
         return redirect('godash')
-    
-@login_required(login_url='regcomp')
-def goaddcust1(request):
-    return render(request, 'app1/addcust1.html')
 
 
 
@@ -27673,15 +27669,14 @@ def gosalesorder(request):
 
 def convert_to_inv(request,pk):
     sale = salesorder.objects.get(id=pk)
-    salename = sale.salename.split(" ")[1:]
-    name = ' '.join(salename)
+
 
     if sale.paidoff:
         amt=float(sale.paidoff)
     else:
         amt = 0
 
-    inv = invoice(customername=name, email=sale.saleemail,
+    inv = invoice(customername=sale.salename, email=sale.saleemail,
         invoiceno=sale.saleno,
         invoicedate=sale.saledate,
         terms=sale.term_days, duedate=sale.shipmentdate, bname=sale.saleaddress,
@@ -28066,11 +28061,16 @@ def sales_order_view(request,id):
     sale_lname = upd.salename.split(' ')[2]
     saleitem = sales_item.objects.filter(salesorder=id)
     cust = customer.objects.get(firstname = sale_fname,lastname=sale_lname,cid=cmp1)
+    tot_dis = 0
+    for s in saleitem:
+        tot_dis += int( s.discount)
+
     context ={
         'sale':upd,
         'cmp1':cmp1,
         'saleitem':saleitem,
-        'cust' : cust
+        'cust' : cust,
+        'tot_dis':tot_dis
     }
 
     return render(request,'app1/sales_order_view.html',context)

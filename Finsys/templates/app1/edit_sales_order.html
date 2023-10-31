@@ -3404,6 +3404,7 @@ $(document).on('change','#plosu',function()   {
                     company_name : $("#company").val(),
                     location : $("#location").val(),
                     openbalance : $("#openbalance").val(),
+                    credit_limit : $("#crd_lmt").val(),
                     email : $("#email").val(),
                     website :$("#website").val(),
                     mobile :$("#mobile").val(),
@@ -4766,14 +4767,23 @@ $(document).on('change','#plosu',function()   {
 
 </script>
 
+
 <script>
     $(document).on('change', '#openbalance',function () {
         openbal = $("#openbalance").val()
         if($('#bal').val()=='credit'){
             if(openbal.slice(0,1) != '-'){
-                document.getElementById("openbalance").value = "-"+openbal
+                if(parseFloat(openbal) != 0){
+                    document.getElementById("openbalance").value = "-"+openbal
+                }else{
+                    document.getElementById("openbalance").value = openbal
+                }
             }else{
-                document.getElementById("openbalance").value = openbal
+                if(parseFloat(openbal) != 0){
+                    document.getElementById("openbalance").value = openbal
+                }else{
+                    document.getElementById("openbalance").value = -1 * parseFloat(openbal)
+                }
             }
         }else{
             document.getElementById("openbalance").value = openbal
@@ -4785,10 +4795,14 @@ $(document).on('change','#plosu',function()   {
         if(openbal != ""){
             if($('#bal').val()=='credit'){
                 openbal = $("#openbalance").val()
-                document.getElementById("openbalance").value = "-"+openbal
+                if (parseFloat(openbal) != 0){
+                    document.getElementById("openbalance").value = "-"+openbal
+                }else{
+                    document.getElementById("openbalance").value = openbal
+                }
             }else{
                 openbal = $("#openbalance").val()
-                document.getElementById("openbalance").value = openbal.slice(1,)
+                document.getElementById("openbalance").value = -1*(parseFloat(openbal))
             }
         }
     });
